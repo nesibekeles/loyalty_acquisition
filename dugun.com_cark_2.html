@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Düğün.com Avantaj Çarkı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d63384; 
+            --primary-dark: #a82266;
+            --bg-color: #f8f9fa;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        /* Header */
+        .header-content {
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 600px;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: var(--text-dark);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        h1 span { color: var(--primary); }
+
+        .subtitle { color: var(--text-light); font-size: 16px; line-height: 1.5; }
+
+        /* Çark Alanı */
+        .wheel-wrapper {
+            position: relative;
+            width: 420px;
+            height: 420px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        canvas {
+            width: 92%;
+            height: 92%;
+            border-radius: 50%;
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border: 1px solid #eee;
+        }
+
+        .center-circle img { width: 55px; height: auto; }
+
+        .marker {
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 24px solid var(--text-dark);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+            z-index: 20;
+        }
+
+        /* Buton */
+        .spin-btn {
+            background: var(--primary);
+            color: white;
+            padding: 16px 48px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .spin-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(214, 51, 132, 0.4);
+        }
+
+        .spin-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-active { display: flex; opacity: 1; }
+
+        .modal-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: left;
+            position: relative;
+        }
+
+        .modal-icon { font-size: 40px; margin-bottom: 15px; text-align: center; display: block; }
+        .modal-title { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; text-align: center; }
+        .modal-desc { font-size: 14px; color: var(--text-light); margin-bottom: 25px; text-align: center; line-height: 1.5; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-dark); margin-bottom: 6px; }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+            box-sizing: border-box; 
+        }
+
+        .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1); }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+        
+        .checkbox-group input { margin-top: 3px; }
+        .checkbox-group a { color: var(--primary); text-decoration: underline; }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover { background: var(--primary-dark); }
+
+        /* DÜZELTİLDİ: Result Box artık varsayılan olarak block ama parent div (step2) gizli */
+        .result-box {
+            background: #fdf2f5;
+            border: 1px dashed var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            /* display: none; KALDIRILDI, parent kontrol ediyor */
+        }
+
+        .coupon-code-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .coupon-code {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: 1px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .copy-btn:hover { text-decoration: underline; }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-content">
+        <h1>Düğün.com <span>Avantaj Çarkı</span></h1>
+        <p class="subtitle">Düğün.com üyelik sürecinde kullanabileceğin harika indirimler seni bekliyor.</p>
+    </div>
+
+    <div class="wheel-wrapper">
+        <div class="marker"></div>
+        <canvas id="wheelCanvas" width="840" height="840"></canvas> 
+        <div class="center-circle">
+            <img src="https://dugun.com/assets/images/logo/dugun.svg" alt="Düğün.com">
+        </div>
+    </div>
+
+    <button class="spin-btn" id="spinButton" onclick="spinWheel()">ÇARKI ÇEVİR VE KAZAN</button>
+
+    <div class="modal-overlay" id="formModal">
+        <div class="modal-card">
+            <button class="close-modal-btn" onclick="closeModal()">×</button>
+            
+            <div id="step1">
+                <span class="modal-icon">🎁</span>
+                <h3 class="modal-title">Avantajı Yakaladın!</h3>
+                <p class="modal-desc">Tebrikler, şanslı gününüzdesiniz! Kazandığınız hediyeyi görüntülemek için lütfen bilgilerinizi giriniz.</p>
+                
+                <form id="leadForm" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label class="form-label">Ad Soyad</label>
+                        <input type="text" class="form-input" id="fullname" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Firma Adı</label>
+                        <input type="text" class="form-input" id="company" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Telefon Numarası</label>
+                        <input type="tel" class="form-input" id="phone" placeholder="5XX..." maxlength="10" required>
+                        <small style="color:#999; font-size:11px;">Başında 0 olmadan 10 hane giriniz.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">E-posta</label>
+                        <input type="email" class="form-input" id="email" placeholder="ornek@firma.com" required>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent" required>
+                        <label for="consent">
+                            Bu kampanyaya katılarak <a href="https://dugun.com/kurumsal/pazarlama-izni" target="_blank">Düğün.com iletişim izinlerini</a> kabul edersiniz.
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">HEDİYEMİ GÖSTER</button>
+                </form>
+            </div>
+
+            <div id="step2" style="display:none;">
+                <span class="modal-icon">🎉</span>
+                <h3 class="modal-title" style="color:var(--primary);">Tebrikler!</h3>
+                <p class="modal-desc">Ödülünüz başarıyla tanımlandı. Aşağıdaki kodu müşteri temsilcinizle paylaşabilirsiniz.</p>
+                
+                <div class="result-box">
+                    <strong style="font-size:18px; color:#333; display:block; margin-bottom:5px;" id="prizeNameDisplay"></strong>
+                    <div class="coupon-code-container">
+                        <span class="coupon-code" id="uniqueCode">...</span>
+                        <button class="copy-btn" onclick="copyCode()">Kopyala</button>
+                    </div>
+                    <p style="font-size:12px; color:#999; margin-top:10px;">Ayrıca bu bilgileri e-posta adresinize de gönderdik.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    const segments = [
+        { label: "Ek %10 İndirim", probability: 30, bgColor: "#ffffff", textColor: "#333" },
+        { label: "3 Ay Üst Paket", probability: 20, bgColor: "#fcebf4", textColor: "#d63384" }, 
+        { label: "Haftanın Firması", probability: 15, bgColor: "#ffffff", textColor: "#333" },
+        { label: "Influencer Videosu", probability: 15, bgColor: "#fcebf4", textColor: "#d63384" },
+        { label: "Listeleme Sabit", probability: 10, bgColor: "#ffffff", textColor: "#333" },
+        { label: "Pro Foto Çekimi", probability: 10, bgColor: "#fcebf4", textColor: "#d63384" }
+    ];
+
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const spinButton = document.getElementById('spinButton');
+    
+    let currentAngle = 0;
+    let isSpinning = false;
+    let pendingWinnerIndex = -1;
+
+    function drawWheel() {
+        const sliceAngle = (2 * Math.PI) / segments.length;
+        const radius = canvas.width / 2;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        let startAngle = 0;
+
+        segments.forEach(segment => {
+            const endAngle = startAngle + sliceAngle;
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.fillStyle = segment.bgColor;
+            ctx.fill();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#e5e7eb"; 
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(startAngle + sliceAngle / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = segment.textColor;
+            ctx.font = "600 32px Inter"; 
+            ctx.fillText(segment.label, radius - 40, 10);
+            ctx.restore();
+
+            startAngle = endAngle;
+        });
+    }
+
+    // Telefon Input: Sadece Rakam
+    document.getElementById('phone').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    function pickWeightedWinner() {
+        const random = Math.random() * 100;
+        let accumulator = 0;
+        for (let i = 0; i < segments.length; i++) {
+            accumulator += segments[i].probability;
+            if (random <= accumulator) return i;
+        }
+        return 0;
+    }
+
+    function spinWheel() {
+        if (isSpinning) return;
+        isSpinning = true;
+        spinButton.disabled = true;
+
+        pendingWinnerIndex = pickWeightedWinner();
+        
+        const sliceDegree = 360 / segments.length;
+        const targetIndexPosition = pendingWinnerIndex * sliceDegree;
+        const targetCenterOffset = sliceDegree / 2; 
+        const targetAngleOnWheel = targetIndexPosition + targetCenterOffset;
+
+        const extraSpins = 5 * 360; 
+        let finalRotation = extraSpins + (270 - targetAngleOnWheel);
+        
+        if (currentAngle > finalRotation) {
+            finalRotation += 360 * Math.ceil((currentAngle - finalRotation)/360);
+        } else {
+             finalRotation = currentAngle + extraSpins + (360 - (currentAngle % 360)) + (270 - targetAngleOnWheel);
+        }
+
+        canvas.style.transform = `rotate(${finalRotation}deg)`;
+        currentAngle = finalRotation;
+
+        setTimeout(() => {
+            isSpinning = false;
+            document.getElementById('formModal').classList.add('modal-active');
+        }, 4100);
+    }
+
+    function submitForm(e) {
+        e.preventDefault();
+
+        // 1. Telefon Numarası Uzunluk Kontrolü (YENİ)
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput.value.length < 10) {
+            alert("Lütfen telefon numarasını başında 0 olmadan 10 hane olarak giriniz. (Örn: 5321234567)");
+            return;
+        }
+        
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.innerHTML = "İşleniyor...";
+        submitBtn.disabled = true;
+
+        const formData = {
+            name: document.getElementById('fullname').value,
+            company: document.getElementById('company').value,
+            phone: phoneInput.value,
+            email: document.getElementById('email').value,
+            prize: segments[pendingWinnerIndex].label,
+            code: 'DGN-' + Math.random().toString(36).substr(2, 6).toUpperCase()
+        };
+
+        // Simülasyon
+        setTimeout(() => {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            
+            // Sonuçları Doldur
+            document.getElementById('prizeNameDisplay').innerText = formData.prize;
+            document.getElementById('uniqueCode').innerText = formData.code;
+        }, 1000);
+    }
+
+    function copyCode() {
+        const code = document.getElementById('uniqueCode').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.innerText = "Kopyalandı!";
+            setTimeout(() => { btn.innerText = "Kopyala"; }, 2000);
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('formModal').classList.remove('modal-active');
+    }
+
+    drawWheel();
+</script>
+</body>
+</html>
