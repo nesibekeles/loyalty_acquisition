@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Düğün.com | 2026 Strateji Projesi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --brand-color: #00988a; /* Düğün.com yeşili */
+            --brand-dark: #2c3e50;
+            --bg-light: #f8f9fa;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: #333;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 1rem 0;
+            z-index: 1030;
+        }
+        .navbar-brand img {
+            height: 45px;
+        }
+        
+        /* Tabs */
+        .nav-pills .nav-link {
+            color: var(--brand-dark);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--brand-color);
+            color: #fff;
+            border-color: var(--brand-color);
+            box-shadow: 0 4px 10px rgba(0, 152, 138, 0.3);
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .card-header-custom {
+            background-color: rgba(0, 152, 138, 0.08);
+            color: var(--brand-color);
+            padding: 15px 25px;
+            border-left: 6px solid var(--brand-color);
+        }
+        
+        /* Campaign Cards (Acquisition) */
+        .campaign-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            height: 100%;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease;
+        }
+        .campaign-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .campaign-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .campaign-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .campaign-body {
+            padding: 20px;
+        }
+        .info-box {
+            background: #fcfcfc;
+            border-left: 3px solid #ddd;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        .info-box.kitle { border-color: #6c757d; }
+        .info-box.soylem { border-color: var(--brand-color); background-color: rgba(0, 152, 138, 0.05); font-style: italic; }
+        .info-box.uygulama { border-color: #fd7e14; }
+
+        /* Images & Lightbox */
+        .preview-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #eee;
+            cursor: zoom-in;
+            transition: opacity 0.3s;
+        }
+        .preview-img:hover {
+            opacity: 0.9;
+            border-color: var(--brand-color);
+        }
+
+        /* Implementation Plan Modern List */
+        .plan-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #eaeaea;
+        }
+        .step-icon {
+            min-width: 50px;
+            height: 50px;
+            background: var(--brand-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 20px;
+        }
+
+        /* ROI Calculator */
+        .roi-box {
+            background: #eefbf9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px dashed var(--brand-color);
+            margin-top: 15px;
+        }
+        .roi-result {
+            font-size: 2rem;
+            color: var(--brand-color);
+            font-weight: bold;
+        }
+        
+        /* Table Styles */
+        .custom-table thead {
+            background-color: var(--brand-dark);
+            color: #fff;
+        }
+        
+        /* Discount Calculator Styles */
+        .calculator-area {
+            background-color: #f1f8f7;
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+            padding: 20px;
+            height: 100%;
+        }
+
+        /* Padding Fixes */
+        .content-spacer {
+            padding: 1.5rem 1.5rem 1.5rem 2rem; /* Left padding increased */
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar fixed-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="#">
+                <img src="https://dugun.com/assets/images/logo/dugun.svg" alt="Düğün.com Logo">
+            </a>
+        </div>
+    </nav>
+   <div class="container" style="margin-top: 100px; padding-bottom: 80px;">
+        <div class="tab-content" id="mainTabContent">
+            <div class="tab-pane fade show active" id="acquisition-content">
+                
+                <div class="text-center mb-5 mt-4">
+                    <h2 class="text-uppercase" style="color:var(--brand-color)">Yeni Satış Büyüme Planı</h2>
+                    <p class="lead text-muted">3 Ana kategoride ilerleyeceğiz: Kampanyalar, İş Ortağım Sayfası, Promosyon Firmalar.</p>
+                </div>
+
+                <h4 class="mb-4 ps-2 border-start border-4 border-success">Kategori 1: Kampanyalar</h4>
+                
+                <div class="alert alert-light border shadow-sm mb-4">
+                    <div class="row">
+                        <div class="col-md-6 border-end">
+                            <strong><i class="fas fa-history text-muted"></i> Güncel Oranlar:</strong> %25-30-35 indirim
+                        </div>
+                        <div class="col-md-6">
+                            <strong><i class="fas fa-magic text-brand"></i> Önerilen Oranlar:</strong> <span class="text-success fw-bold">%20-25-30 indirim</span>
+                        </div>
+			<div class="col-12 mt-2 pt-2 border-top small">
+    <div class="text-danger mb-1">*Ek kategoriye %50 indirim ve Churn firmalara özel %40 indirim de kaldırılır.</div>
+    <div class="text-success">*Ek kategoriye ilk 3 ay üst paket devam eder.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="campaign-card">
+                            <div class="campaign-header">
+                                <div class="campaign-icon bg-primary"><i class="fas fa-handshake"></i></div>
+                                <h6 class="mb-0 fw-bold">Garantili Satış</h6>
+                            </div>
+                            <div class="campaign-body">
+                                <div class="info-box kitle">
+                                    <strong>Hedef Kitle:</strong><br>1-3. Segment & 6 Büyük İl
+                                </div>
+                                <div class="info-box soylem">
+                                    <strong>Söylem:</strong><br>Üye olduktan sonraki ilk <strong>6 ay içinde en az 1</strong> düğün anlaşması garanti!
+                                </div>
+                                <div class="info-box uygulama">
+                                    <strong>Uygulanış:</strong><br>Garanti belgesindeki koşullara uymuş, anlaşma alamamışsa; tüm ücret iadesi + 6 ay ücretsiz yayın.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="campaign-card">
+                            <div class="campaign-header">
+                                <div class="campaign-icon bg-info"><i class="fas fa-snowflake"></i></div>
+                                <h6 class="mb-0 fw-bold">Dondurma Hakkı</h6>
+                            </div>
+                            <div class="campaign-body">
+                                <div class="info-box kitle">
+                                    <strong>Hedef Kitle:</strong><br>Tüm Mekanlar
+                                </div>
+                                <div class="info-box soylem">
+                                    <strong>Söylem:</strong><br><strong>2 ay</strong> ücretsiz yayın dondurma hakkı; ödeme zorluğu yaşadığın veya mekanının kapalı olduğu dönemlerde de düğün.com yanında.
+                                </div>
+                                <div class="info-box uygulama">
+                                    <strong>Uygulanış:</strong><br>Firmadan ödeme yıllık alınır, dondurma istediği tarihlerde sayfası açık kalır ancak lead alamaz (SEO kaybı yaşanmaz).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="campaign-card">
+                            <div class="campaign-header">
+                                <div class="campaign-icon bg-success"><i class="fas fa-gift"></i></div>
+                                <h6 class="mb-0 fw-bold">Ücretsiz Ek Ürünler</h6>
+                            </div>
+                            <div class="campaign-body">
+                                <div class="info-box kitle">
+                                    <strong>Hedef Kitle:</strong><br>Ek Kategori Alanlar
+                                </div>
+                                <div class="info-box soylem">
+                                    <strong>Söylem:</strong><br>Birden fazla kategori satın aldığın durumda ücretsiz faydalanabileceğin ürünlerimiz;
+                                <p class="small text-muted mb-0">
+                                            <i class="fas fa-check text-success"></i> Influencer Çekimi<br>
+                                            <i class="fas fa-check text-success"></i> Profesyonel Fotoğraf Çekimi<br>
+                                            <i class="fas fa-check text-success"></i> Listeleme İlk Sıra<br>
+                                            <i class="fas fa-check text-success"></i> Haftanın Firması<br>
+                                            <i class="fas fa-check text-success"></i> Hazır 10 Lead
+                                        </p>
+				</div>
+                                <div class="info-box uygulama">
+                                    <strong>Uygulanış:</strong><br>Her ek kategori için bir adet ücretsiz ürün alma hakkı olur. Seçimi firmaya bırakmak istemezsek, paket / kategori özelinde ücretsiz ürünleri biz önden belirleyebiliriz. Bunların da crm’de satış esnasında gözükmesini sağlarız.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="campaign-card">
+                            <div class="campaign-header">
+                                <div class="campaign-icon bg-warning text-white"><i class="fas fa-wallet"></i></div>
+                                <h6 class="mb-0 fw-bold">Şimdi Al Sonra Öde</h6>
+                            </div>
+                            <div class="campaign-body">
+                                <div class="info-box kitle">
+                                    <strong>Hedef Kitle:</strong><br>Tüm Mekanlar
+                                </div>
+                                <div class="info-box soylem">
+                                    <strong>Söylem:</strong><br>Tüm kategori ve paketler için giriş fiyatı 10.000 TL; kalan ödemelerini 2 ay sonra yap.
+                                </div>
+                                <div class="info-box uygulama">
+                                    <strong>Uygulanış:</strong><br>Yıllık sözleşme yapılır, ödeme 10K ve kalan tutar olarak iki aşamada tahsil edilir. Ancak kalan tutarın çekim tarihi geldiğinde otomatik tahsilat yapılır, firmadan tekrar bir imza/onay istenmez.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mb-3 ps-2 border-start border-4 border-primary">Kategori 2: İş Ortağım Sayfası Geliştirmeleri</h4>
+                <div class="section-card p-4">
+                    <div class="mb-5">
+                        <h5>A. Akıllı Pop-up Senaryoları</h5>
+                        <p>Kullanıcı davranışına göre tetiklenecek interaktif bildirimler ve iş ortağım sayfasında belirli bir süre gezinen kişilere otomatik çıkacak pop-uplar.</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-success" onclick="openModal('discount')">Özel İndirim (%20)</button>
+                            <button class="btn btn-outline-primary" onclick="openModal('guarantee')">Garantili Satış</button>
+                            <button class="btn btn-outline-warning text-dark" onclick="openModal('demand')">Talep Var! (1356 Çift)</button>
+                            <button class="btn btn-outline-danger" onclick="openModal('testimonial')">Rakiplerden Dinle</button>
+                            <button class="btn btn-outline-info" onclick="openModal('offer')">Bir Çift Teklif Bekliyor</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h5>B. Avantaj Çarkı</h5>
+                        <p>Hem reklamlarda hem sitede interaktif bir içerik görmek kişilerin daha hızlı aksiyon almasını sağlıyor.
+ 			<div class="form-check mb-2">
+                                            <label class="form-check-label small" for="checkSabit">✔ Çarkı çevirebilmek veya çevirince sonucunu görebilmek için revid formu bırakmasını zorunlu olur.</label>
+                                        </div>
+ 			<div class="form-check mb-2">
+                                            <label class="form-check-label small" for="checkSabit">✔ Sadece indirim değil; 1 ay üst paket, ücretsiz influencer çekimi gibi ürünümüzü öne çıkaran seçenekler veririz.</label>
+                                        </div>
+ 			<div class="form-check mb-2">
+                                            <label class="form-check-label small" for="checkSabit">✔ "Şanslı günündesin, çarkı çevir fırsatları kaçırma" kurgusu.</label>
+                                        </div>
+ 			</p>
+                        <a href="https://nesibekeles.github.io/loyalty_acquisition/dugun.com_cark_2.html" target="_blank" class="btn btn-danger btn-lg">
+                            <i class="fas fa-dharmachakra me-2"></i> Çarkı Çevir 
+                        </a>
+                    </div>
+
+                    <div>
+                        <h5>C. ROI Hesaplama Aracı</h5>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <ul class="nav nav-tabs card-header-tabs" id="roiTab" role="tablist">
+                                            <li class="nav-item">
+                                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#roi-opt1" type="button">Opsiyon 1: Net Kar</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#roi-opt2" type="button">Opsiyon 2: Potansiyel</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="roi-opt1">
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Düğün.com Maliyeti (TL)</label>
+                                                        <input type="number" id="cost" class="form-control" placeholder="50000">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Yıllık Düğün Sayısı</label>
+                                                        <input type="number" id="count" class="form-control" placeholder="40">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-label">Düğün Başı Ücret (TL)</label>
+                                                        <input type="number" id="price" class="form-control" placeholder="75000">
+                                                    </div>
+                                                    <div class="col-12 mt-3">
+                                                        <button class="btn btn-success w-100" onclick="calculateProfit()">Hesapla</button>
+                                                    </div>
+                                                    <div class="col-12 mt-3 text-center roi-box d-none" id="result1-box">
+                                                        <small>İŞ ORTAKLIĞI KARINIZ:</small>
+                                                        <div class="roi-result" id="res1">0 TL</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="roi-opt2">
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label>Şehir</label>
+                                                        <select class="form-select" id="city">
+                                                            <option value="1.5">İstanbul</option>
+                                                            <option value="1.2">Ankara</option>
+                                                            <option value="1.3">İzmir</option>
+                                                            <option value="1.0">Diğer</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Kategori</label>
+                                                        <select class="form-select" id="cat">
+                                                            <option value="50000">Kır Düğünü</option>
+                                                            <option value="70000">Oteller</option>
+                                                            <option value="30000">Düğün Salonu</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Paket</label>
+                                                        <select class="form-select" id="pack">
+                                                            <option value="2">Winner 2X</option>
+                                                            <option value="4">Winner 4X</option>
+                                                            <option value="6">Winner 6X</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 mt-3">
+                                                        <button class="btn btn-primary w-100" onclick="calculatePotential()">Olası Kazancı Gör</button>
+                                                    </div>
+                                                    <div class="col-12 mt-3 text-center roi-box d-none" id="result2-box">
+                                                        <small>TAHMİNİ KAZANÇ:</small>
+                                                        <div class="roi-result" id="res2">0 TL</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mb-3 ps-2 border-start border-4 border-secondary">Kategori 3: Gelecek Adımlar (Next Steps)</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm" style="background: #f8f9fa;">
+                            <div class="card-body">
+                                <h5 class="card-title text-secondary"><i class="fas fa-funnel-dollar me-2"></i>1. Promosyonu Satışa Çevirme</h5>
+                                <p class="card-text">Promosyon firmalarını "Pre-sales" havuzu olarak konumlayıp, sistemdeki aktifliklerine göre satış ekibine lead olarak atama süreçleri.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm" style="background: #f8f9fa;">
+                            <div class="card-body">
+                                <h5 class="card-title text-secondary"><i class="fas fa-users-class me-2"></i>2. Offline Etkinlikler</h5>
+                                <p class="card-text">Yüz yüze güven oluşturmak için "Düğün Sektörü 101" seminerleri ve bölgesel buluşmaların organize edilmesi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> </div>
+    </div>
+
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0 shadow-none">
+                <div class="modal-header border-0 p-0 mb-2">
+                    <h5 class="modal-title text-white" id="imageModalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0 text-center">
+                    <img src="" id="imageModalSrc" class="img-fluid rounded shadow-lg" style="max-height: 85vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dynamicModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center pb-5" id="modalBodyContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4 bg-white border-top fixed-bottom">
+        <p class="mb-0 text-muted small">© 2026 Düğün.com Strateji Sunumu | Nesibe Keleş</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // --- 1. LOYALTY DISCOUNT CALCULATOR LOGIC ---
+        function calcLoyaltyPrice() {
+            let listPrice = parseFloat(document.getElementById('listPrice').value);
+            if (!listPrice || listPrice < 0) listPrice = 0;
+            const originalPrice = listPrice;
+
+            // Additive Discounts
+            let additiveRate = 0;
+            document.querySelectorAll('.discount-check:checked').forEach(el => {
+                additiveRate += parseFloat(el.value);
+            });
+
+            // Intermediate Price
+            let intermediatePrice = listPrice * (1 - (additiveRate / 100));
+
+            // Multiplicative Discount (Yearly)
+            let isYearly = document.getElementById('checkYillik').checked;
+            let finalPrice = intermediatePrice;
+            
+            if (isYearly) {
+                finalPrice = intermediatePrice * 0.80; // %20 indirim
+            }
+
+            // Results
+            document.getElementById('finalLoyaltyPrice').innerText = finalPrice.toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + ' TL';
+
+            let totalDiscountRate = 0;
+            let totalSaved = 0;
+
+            if (originalPrice > 0) {
+                totalSaved = originalPrice - finalPrice;
+                totalDiscountRate = (totalSaved / originalPrice) * 100;
+            }
+
+            document.getElementById('totalDiscountRate').innerText = '%' + totalDiscountRate.toLocaleString('tr-TR', { maximumFractionDigits: 1 });
+            document.getElementById('totalSavedAmount').innerText = totalSaved.toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + ' TL';
+        }
+
+        // --- 2. IMAGE LIGHTBOX LOGIC ---
+        function viewImage(src, title) {
+            document.getElementById('imageModalSrc').src = src;
+            document.getElementById('imageModalTitle').innerText = title || '';
+            new bootstrap.Modal(document.getElementById('imageModal')).show();
+        }
+
+        // --- 3. POPUP SIMULATOR LOGIC ---
+        const toolModal = new bootstrap.Modal(document.getElementById('dynamicModal'));
+        const modalBody = document.getElementById('modalBodyContent');
+
+        function openModal(type) {
+            let html = '';
+            switch(type) {
+                case 'discount':
+                    html = `<i class="fas fa-percent fa-4x text-success mb-3"></i><h3>Sadece Sana Özel %20 İndirim!</h3><p>Hemen kullan, fırsatı kaçırma.</p><button class="btn btn-success mt-2">İndirimi Al</button>`;
+                    break;
+                case 'guarantee':
+                    html = `<i class="fas fa-shield-alt fa-4x text-primary mb-3"></i><h3>Garantili Satış</h3><p>Bu aya özel garantili satış kampanyamızdan faydalanmak için hemen iletişime geç.</p><button class="btn btn-primary mt-2">Bilgi Al</button>`;
+                    break;
+                case 'demand':
+                    html = `<i class="fas fa-users fa-4x text-warning mb-3"></i><h3>Bölgende 1356 Çift Mekan Arıyor!</h3><p>Potansiyel müşterilerini rakiplerine kaptırma.</p><button class="btn btn-warning mt-2">Hemen Başla</button>`;
+                    break;
+                case 'testimonial':
+                    html = `<div class="mb-3 d-flex justify-content-center">
+            <img src="https://github.com/nesibekeles/loyalty_acquisition/blob/main/i%C5%9F%20orta%C4%9F%C4%B1m%20video.png?raw=true" class="img-fluid rounded shadow" style="max-height: 300px;">
+        </div>
+        <h3>Düğün.com'u Rakiplerinden Dinle</h3>
+        <p>Satışlarını katlayanların hikayesi...</p>
+        <button class="btn btn-danger mt-2">Beni Arayın</button>`;
+                    break;
+                case 'offer':
+                    html = `<i class="fas fa-envelope-open-text fa-4x text-info mb-3"></i><h3>Bir Çift Fiyat Teklifi Bekliyor!</h3><p>Hemen iş ortağımız olun, bu bildirimleri kaçırmayın.</p><button class="btn btn-info text-white mt-2">İncele</button>`;
+                    break;
+            }
+            modalBody.innerHTML = html;
+            toolModal.show();
+        }
+
+        // --- 4. ROI CALCULATOR LOGIC (ACQUISITION) ---
+        function calculateProfit() {
+            const cost = parseFloat(document.getElementById('cost').value) || 0;
+            const count = parseFloat(document.getElementById('count').value) || 0;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const res = (count * price) - cost;
+            document.getElementById('res1').innerText = res.toLocaleString('tr-TR') + ' TL';
+            document.getElementById('result1-box').classList.remove('d-none');
+        }
+
+        function calculatePotential() {
+            const city = parseFloat(document.getElementById('city').value);
+            const cat = parseFloat(document.getElementById('cat').value);
+            const pack = parseFloat(document.getElementById('pack').value);
+            const res = cat * pack * city;
+            document.getElementById('res2').innerText = res.toLocaleString('tr-TR') + ' TL';
+            document.getElementById('result2-box').classList.remove('d-none');
+        }
+    </script>
+</body>
+</html>
