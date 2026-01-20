@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saha Ziyaret Raporu - Executive Summary V5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-pink: #e91e63;
+            --text-dark: #37474f;
+            --text-medium: #607d8b;
+            --text-light: #90a4ae;
+            --bg-body: #f8f9fa;
+            --border-light: #eceff1;
+            --border-bold: #cfd8dc;
+            
+            /* Durum Renkleri */
+            --success-green: #00b894;
+            --problem-red: #d63031;
+            
+            /* Faz Etiket Renkleri */
+            --tag-bg-1: #e3f2fd; --tag-text-1: #0984e3;
+            --tag-bg-2: #fff3e0; --tag-text-2: #e17055;
+            --tag-bg-3: #f3e5f5; --tag-text-3: #6c5ce7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .main-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.03);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .top-bar {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-bottom: 3px solid var(--accent-pink);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .brand-section { font-weight: 700; font-size: 20px; }
+        .brand-name { color: var(--accent-pink); }
+        .brand-divider { color: var(--text-light); margin: 0 8px; font-weight: 400; }
+        .report-title { color: var(--text-dark); }
+        .meta-section { text-align: right; font-size: 12px; color: var(--text-medium); }
+        .meta-label { color: var(--text-light); font-weight: 500; }
+
+        /* HERO & KARTLAR */
+        .hero-section { padding: 40px 30px 30px; }
+        h1 { font-size: 28px; font-weight: 800; margin: 0 0 8px 0; color: var(--text-dark); }
+        .hero-subtitle { font-size: 16px; color: var(--text-medium); margin-bottom: 35px; font-weight: 500; }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .metric-card {
+            background: #ffffff;
+            padding: 15px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+            border-top: 3px solid var(--accent-pink);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .metric-title {
+            display: block; font-size: 11px; text-transform: uppercase;
+            color: var(--text-light); font-weight: 600; margin-bottom: 5px; letter-spacing: 0.5px;
+        }
+        .metric-value { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+
+        /* ANA İÇERİK */
+        .content-section { padding: 30px; }
+        .section-header {
+            font-size: 16px; text-transform: uppercase; letter-spacing: 1px;
+            color: #546e7a; font-weight: 700; margin-bottom: 25px;
+            padding-bottom: 10px; border-bottom: 2px solid var(--border-light);
+        }
+
+        /* CHECKLIST */
+        .checklist-row {
+            display: flex; align-items: flex-start; padding: 20px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .checklist-row.bonus-start {
+            border-top: 2px solid var(--border-bold); margin-top: 30px; padding-top: 30px;
+        }
+        .checklist-row:last-child { border-bottom: none; }
+
+        .checkbox-wrapper { padding-top: 4px; margin-right: 15px; }
+        input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent-pink); }
+        .content-wrapper { flex: 1; }
+
+        .main-line { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 10px; }
+        
+        .phase-tag {
+            font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .phase-1 { background-color: var(--tag-bg-1); color: var(--tag-text-1); }
+        .phase-2 { background-color: var(--tag-bg-2); color: var(--tag-text-2); }
+        .phase-3 { background-color: var(--tag-bg-3); color: var(--tag-text-3); }
+
+        .problem-text { color: var(--problem-red); font-weight: 600; font-size: 14px; }
+        .arrow { color: var(--border-bold); font-size: 14px; }
+        .solution-text { color: var(--success-green); font-weight: 700; font-size: 14px; }
+        .label-mini { font-size: 9px; color: var(--text-light); text-transform: uppercase; margin-right: 5px; font-weight: 600; }
+
+        /* DETAYLAR */
+        details { width: 100%; }
+        summary {
+            cursor: pointer; color: var(--accent-pink); font-size: 12px; font-weight: 600;
+            list-style: none; display: inline-flex; align-items: center;
+            background-color: #fce4ec; padding: 4px 12px; border-radius: 4px; transition: all 0.2s;
+        }
+        summary:hover { background-color: #f8bbd0; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: "+"; margin-left: 6px; font-weight: bold; }
+        details[open] summary::after { content: "-"; }
+
+        .details-panel {
+            margin-top: 15px; padding: 20px; background-color: #fafafa;
+            border-radius: 6px; border: 1px solid var(--border-light);
+            font-size: 13px; color: var(--text-dark); border-left: 3px solid var(--accent-pink);
+        }
+        .detail-block { margin-bottom: 12px; }
+        .detail-block strong { display: block; color: var(--text-dark); font-weight: 700; margin-bottom: 4px; }
+        .detail-link { color: var(--tag-text-1); text-decoration: none; font-weight: 500; border-bottom: 1px dotted; }
+        .detail-link:hover { border-bottom: 1px solid; }
+
+        /* FLOW CHART */
+        .flow-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .flow-step {
+            background: white; border: 1px solid var(--border-light); padding: 6px 10px;
+            border-radius: 4px; text-align: center; font-size: 11px; min-width: 70px;
+        }
+        .flow-step b { display: block; color: var(--accent-pink); margin-bottom: 2px; }
+        .flow-arr { color: var(--text-light); }
+
+        /* --- POPUP (MODAL) STYLES --- */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background-color: #fefefe; margin: 10% auto; padding: 0;
+            border: 1px solid #888; width: 400px; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        .modal-header {
+            background: var(--accent-pink); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-title { font-weight: 700; font-size: 16px; margin: 0; }
+        .close { color: white; font-size: 24px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .modal-body { padding: 20px; }
+        
+        .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; font-size: 13px; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #888; font-weight: 500; }
+        .info-val { font-weight: 600; color: #333; text-align: right; }
+        .info-val.bad { color: #d63031; }
+        .info-val.good { color: #00b894; }
+        
+        .comp-list { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+        .comp-tag { background: #eee; padding: 3px 8px; border-radius: 4px; font-size: 11px; color: #555; }
+        
+        .action-btn {
+            display: inline-block; background-color: var(--tag-text-1); color: white;
+            padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 12px;
+            font-weight: 600; cursor: pointer; border: none; margin-top: 5px;
+        }
+        .action-btn:hover { background-color: #0d47a1; }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; gap: 15px; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .main-line { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .arrow { display: none; }
+            .modal-content { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="top-bar">
+        <div class="header-content">
+            <div class="brand-section">
+                <span class="brand-name">DÜĞÜN.COM</span>
+                <span class="brand-divider">|</span>
+                <span class="report-title">EXECUTIVE SUMMARY</span>
+            </div>
+            <div class="meta-section">
+                <div><span class="meta-label">Konu:</span> Saha Gözlem & Aksiyon Planı</div>
+                <div><span class="meta-label">Tarih:</span> <span id="date"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h1>Saha Ziyaret Raporu</h1>
+        <div class="hero-subtitle">Problemler, Çözümler ve Stratejik Yol Haritası</div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-title">Kapsam</span>
+                <span class="metric-value">2 Günlük Ziyaret</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Hedef</span>
+                <span class="metric-value">Kampanya Verimliliği</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Mevcut Durum</span>
+                <span class="metric-value">3 Ziyaret / Gün</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Sonuçlar</span>
+                <span class="metric-value">3 Satış, 3 Yenileme</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-header">AKSİYON PLANLAMA & SÜREÇ İYİLEŞTİRME</div>
+        
+        <div class="checklist-row">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-1">1. HAZIRLIK</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Düşük REVID & Randevu Sayısı</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">Randevu Kaynak ve Kanal Planlaması</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            <strong>Sorun Detayı:</strong> Yeni satış randevu sayıları yetersiz. Yenileme firmaları randevuları geciktiriyor, erteliyor.
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm Detayı:</strong>
+                            <ul>
+                                <li>REVID kanallarının çeşitlendirilmesi. <a href="https://nesibekeles.github.io/loyalty_acquisition/acquisition%20projects_final.html" target="_blank" class="detail-link">Detaylar için tıklayın &rarr;</a></li>
+                                <li>Yenilemede erken randevu için panelden başvuru toplanması. <a href="https://www.figma.com/proto/mnh0bBzAH04jljmQ6HHKoE/isortagim.com?page-id=2433%3A21782&node-id=2433-30134&viewport=450%2C171%2C0.55&t=bmXumWEBN3qs5VTm-9&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=2433%3A30134" target="_blank" class="detail-link">Figma Prototipi &rarr;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="checklist-row">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-1">1. HAZIRLIK</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Operasyonel Verimsizlik</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">Backup Plan & Otomatik Randevu Bildirimi</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            <strong>Sorun Detayı:</strong> Randevuların sık iptal olması, backup plan olmayışı, ekibin kısıtlı kişi sayısı ve lokasyonların kopuk yapısı.
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm 1 (Otomatik Bildirim):</strong> Randevu netleşince otomatik SMS/WhatsApp: 
+                            <em>"Yarın 13:30'da mekanındayız! Düğün.com'u rakiplerinden dinlemek ve ayrıcalıkları keşfetmek için tıkla."</em>
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm 2 (Backup Plan):</strong> İptal durumunda boş kalmamak için; lokasyon bazlı CRM filtresi ile yakındaki potansiyel upsell müşteriye <em>"Bölgedeydim, geçerken uğramak istedim"</em> ziyareti kurgulanabilir.
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="checklist-row">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-1">1. HAZIRLIK</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Ön Hazırlık Eksikliği (Yeni Satış)</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">Satış Destek Randevu Raporu</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            <strong>Sorun Detayı:</strong> Müşteri içgörüsü, firmanın verileri veya rakip bilgileri konusundaki sorular yanıtsız kalabiliyor.
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm Detayı:</strong>
+                            Satış destek ekibi randevu detayları ile birlikte kısa bir "Firma Info Kartı" hazırlar (Google Maps puanı, civardaki rakip firmalar, Instagram analizi, mekan büyüklüğü vb.).
+                            <br><br>
+                            <button id="openModalBtn" class="action-btn">👀 Örnek Info Kartı'nı İncele</button>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="checklist-row">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-2">2. RANDEVU</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Kağıt-Kalemle Anlatım & Materyal Eksikliği</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">Tablet & İnteraktif Dijital Sunum</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            <strong>Sorun Detayı:</strong> Kurumsal sunum ekipmanı yok, tüm anlatım kağıt üzerinde. Paketler ekrandan gösterilmek yerine yazılarak anlatılıyor, profesyonelliği düşürüyor.
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm Detayı:</strong> Hazır şablonları olan tablet kullanımına geçilmeli. Faydalar, başarı hikayeleri ve <u>aktif kampanyalar</u> dijital sunumla gösterilmeli. Kampanyanın "o ana özel" olduğu hissettirilmeli.<br>
+                            <a href="https://nesibekeles.github.io/loyalty_acquisition/dugun.com_playbook.html" target="_blank" class="detail-link">Örnek Sunum Playbook &rarr;</a>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="checklist-row">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-2">2. RANDEVU</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Fiyat/İndirim Odaklı Yaklaşım</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">Satışın Hikayeleştirilmesi</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            <strong>Sorun Detayı:</strong> Kampanya bir hikaye olarak değil, "satış kapama kozu - ikna çaresi" olarak kullanılıyor.
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm Detayı:</strong> Kampanya ve avantajlar, müşteriye kazandıran bir yolculuğa dönüştürülmeli:
+                            <div class="flow-container">
+                                <div class="flow-step"><b>Liste Fiyatı</b>50K</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>İlk Müşteri</b>%30 İnd.</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>Hızlı Başlangıç</b>Upgrade</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>Dondurma</b>Hakkı</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>İade</b>Garantisi</div>
+                            </div>
+                        </div>
+                        <div class="detail-block">
+                            <strong>Yenileme Stratejisi:</strong> Fiyatın "yenilemeye özel" olduğu vurgulanmalı. Dönemi kaçıranlar için indirim oranı düşürülerek fırsat algısı yaratılmalı.
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="checklist-row bonus-start">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-3">3. BONUS</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Sadece Satış Odaklı Temas</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">Yılda 1 "İlişki" Ziyareti</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            Satış baskısı olmadan, sadece firmanın durumu ve önerileri için yapılan analiz/hal-hatır ziyareti gerçekleştirilmeli.
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="checklist-row">
+            <div class="checkbox-wrapper"><input type="checkbox"></div>
+            <div class="content-wrapper">
+                <div class="main-line">
+                    <span class="phase-tag phase-3">3. BONUS</span>
+                    <div><span class="label-mini">SORUN</span><span class="problem-text">Psikolojik Yönetim Zorluğu</span></div>
+                    <div class="arrow">&rarr;</div>
+                    <div><span class="label-mini">ÇÖZÜM</span><span class="solution-text">İkna Materyalleri & Argüman Seti</span></div>
+                </div>
+                <details>
+                    <summary>Detaylar</summary>
+                    <div class="details-panel">
+                        <div class="detail-block">
+                            <strong>Sorun:</strong> Negatif başlayan görüşmeleri pozitife çevirecek materyal eksikliği yaşanıyor (özellikle yenileme görüşmelerinde).
+                        </div>
+                        <div class="detail-block">
+                            <strong>Çözüm:</strong> İtiraz karşılama scriptleri ve başarı hikayeleri içeren görsel setler hazırlanmalı.
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">📍 Firma Info Kartı (Örnek)</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div style="text-align:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <h2 style="margin:0; color:#2c3e50;">Riva's Club</h2>
+                <span style="font-size:12px; color:#888;">Ömerli, İstanbul</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Google Maps Puanı</span>
+                <span class="info-val good">4.8 ⭐ (320 Yorum)</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Instagram Takipçi</span>
+                <span class="info-val">12.5K (Aktif)</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Düğün.com Üyeliği</span>
+                <span class="info-val bad">Yok (Eski Lead)</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Kapasite</span>
+                <span class="info-val">750 - 1000 Kişi</span>
+            </div>
+            
+            <div style="margin-top:15px;">
+                <span class="info-label">🏆 Bölgedeki En Güçlü Rakipler:</span>
+                <div class="comp-list">
+                    <span class="comp-tag">Casa Lavanda</span>
+                    <span class="comp-tag">Senfoni Garden</span>
+                    <span class="comp-tag">Qubbe Garden</span>
+                </div>
+            </div>
+
+            <div style="margin-top:15px; background:#e3f2fd; padding:10px; border-radius:4px; font-size:11px; color:#0d47a1;">
+                <strong>💡 Satış İpucu:</strong> Rakibi Casa Lavanda geçen ay Gold paket aldı ve vitrinde. Müşteriye vitrindeki görünürlük farkını gösterin.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tarih
+    document.getElementById('date').textContent = new Date().toLocaleDateString('tr-TR');
+
+    // Modal Logic
+    var modal = document.getElementById("infoModal");
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
