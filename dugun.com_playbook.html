@@ -237,8 +237,8 @@
             <div class="row zigzag-row">
                 <div class="col-lg-6 mb-4 mb-lg-0 pe-lg-5 order-lg-1 order-2 zigzag-content">
                     <i class="fas fa-user-tie feature-icon-small"></i>
-                    <h3>Size Özel Atanmış Stratejist</h3>
-                    <p>Standart bir müşteri hizmetleri değil, işinizi sahiplenen bir Performans Yöneticisi. Verilerinizi analiz eder, profil fotoğraflarınızı optimize eder ve rakiplerinizin önüne geçmeniz için proaktif stratejiler geliştirir.</p>
+                    <h3>Size Özel Atanmış Performans Yöneticisi</h3>
+                    <p>Standart bir müşteri hizmetleri değil, işinizi sahiplenen bir Performans Yöneticisi. Verilerinizi analiz eder, eksiklerinizi tamamlamanız için size rehberlik eder ve rakiplerinizin önüne geçmeniz için proaktif stratejiler geliştirir.</p>
                 </div>
                 <div class="col-lg-6 order-lg-2 order-1 zigzag-img-container text-center">
                      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Performans Yönetimi" class="img-fluid" style="max-height: 400px;">
@@ -252,7 +252,7 @@
                 <div class="col-lg-6 ps-lg-5 zigzag-content">
                     <i class="fas fa-chalkboard-teacher feature-icon-small"></i>
                     <h3>Ekibinizi Satış Makinesine Dönüştürün</h3>
-                    <p>Sadece lead (talep) göndermek yetmez, onları kapatmanız gerekir. Sektörün en deneyimli direktörlerinden, sadece Düğün.com panel kullanımını değil, çift psikolojisine yönelik "Satış Kapama Sanatı"nı öğrenin.</p>
+                    <p>Sadece fazla çift talebi almak yetmez, bu talepleri satışa dönüştürmeniz gerekir. Sektörün en deneyimli direktörlerinden, sadece Düğün.com panel kullanımını değil, çift psikolojisine yönelik "Satış Kapama Sanatı"nı öğrenin.</p>
                 </div>
             </div>
 
@@ -277,7 +277,7 @@
                 <div class="col-lg-6 ps-lg-5 zigzag-content">
                     <i class="fab fa-instagram feature-icon-small"></i>
                     <h3>Marka Bilinirliğinizi Maksimize Edin</h3>
-                    <p>Sadece site içi trafikle yetinmiyoruz. Instagram, TikTok ve YouTube'daki devasa erişim gücümüzü sizin vitrininiz haline getiriyoruz. Çiftler sizi sosyal medyada görür, Düğün.com'da inceler ve karar verir.</p>
+                    <p>Sadece site içi trafikle yetinmiyoruz. Instagram, TikTok ve YouTube'daki devasa erişim gücümüzü sizin vitrininiz haline getiriyoruz. Her mecradan çiftlerin karşısına çıkmanızı sağlıyor.</p>
                 </div>
             </div>
 
@@ -332,7 +332,7 @@
                         </div>
                         <div class="form-floating mb-4">
                             <input type="number" class="form-control form-control-lg fw-bold" id="emptyDates" placeholder="Örn: 20">
-                            <label for="emptyDates">Bir Sezonda Kalan Boş Gün Sayınız</label>
+                            <label for="emptyDates">Bir Sezonda Ortalama Düğün Sayınız</label>
                             <div class="form-text ms-2">Hafta sonları veya değerli hafta içi günler.</div>
                         </div>
                         <button class="btn btn-dc-pink w-100 btn-lg mt-3 py-3" onclick="calculateROI()">POTANSİYEL KÂRIMI HESAPLA <i class="fas fa-calculator ms-2"></i></button>
@@ -340,7 +340,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="roi-result-box" id="roiResultBox" style="display: none;">
-                        <h4 class="mb-0 text-white-50">Düğün.com ile Sezonluk Potansiyel Ekstra Ciro:</h4>
+                        <h4 class="mb-0 text-white-50">Düğün.com ile Sezonluk Potansiyel Ciro:</h4>
                         <div class="roi-amount" id="totalRevenue">0 TL</div>
                         <p class="lead mb-4">
                             Boş günlerinizden tahmini <span class="fw-bold bg-white text-dark px-2 rounded" id="estimatedBookings">0</span> adet ekstra düğün yakalayabilirsiniz.
@@ -361,7 +361,57 @@
     <section id="kampanyalar" style="background-color: var(--dc-light-gray);">
         <div class="container">
             <h2 class="section-title">Fırsatlar ve Paketler</h2>
-            <p class="section-subtitle">Size en uygun başlangıcı seçin.</p>
+        <div style="
+    background-color: #fce4ec; 
+    color: #c2185b; 
+    border: 1px solid #f8bbd0; 
+    padding: 12px 20px; 
+    border-radius: 8px; 
+    text-align: center; 
+    font-family: 'Poppins', sans-serif; 
+    margin: 10px auto 30px auto; 
+    max-width: 600px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+">
+    <span>🔥 <strong>Sadece ilk görüşmemize özel kampanyalar!</strong></span>
+    <span style="border-left: 1px solid #e91e63; padding-left: 10px; margin-left: 5px;">
+        Bitiş Süresi: <strong id="dynamic-timer" style="font-variant-numeric: tabular-nums;">Hesaplanıyor...</strong>
+    </span>
+</div>
+
+<script>
+(function() {
+    function updateTimer() {
+        const now = new Date();
+        const end = new Date();
+        end.setHours(23, 59, 59, 999); // Bu gece 23:59:59
+
+        const diff = end - now;
+
+        if (diff <= 0) {
+            document.getElementById("dynamic-timer").innerHTML = "Süre Doldu";
+            return;
+        }
+
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        // Çift haneli gösterim (05:03:09 gibi)
+        const format = (num) => (num < 10 ? "0" + num : num);
+        
+        document.getElementById("dynamic-timer").innerHTML = 
+            `${format(h)}sa ${format(m)}dk ${format(s)}sn`;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Sayfa yüklenir yüklenmez çalışsın
+})();
+</script>
 
             <div class="mb-5">
                 <h3 class="fw-bold text-center mb-4 display-6"><i class="fas fa-fire text-danger me-2"></i>Size Özel Aktif Fırsatlar</h3>
@@ -372,7 +422,7 @@
                                 <span class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle me-3"><i class="fas fa-rocket fa-2x"></i></span>
                                 <h5 class="fw-bold mb-0">Hızlı Başlangıç (Upgrade)</h5>
                             </div>
-                            <p class="lead fw-medium">Winner 2x fiyatına, ilk 3 ay boyunca <span class="text-dc-pink fw-bold">Winner 4x</span> görünürlüğü hediye!</p>
+                            <p class="lead fw-medium">İlk aylarınızda tecrübeli rakiplerinizin gerisinde kalmamanız için; Winner 2x fiyatına, ilk 3 ay boyunca <span class="text-dc-pink fw-bold">Winner 4x</span> görünürlüğü hediye!</p>
                         </div>
                     </div>
                      <div class="col-lg-4 col-md-6">
@@ -482,4 +532,5 @@
     </script>
 </body>
 </html>
+
 
