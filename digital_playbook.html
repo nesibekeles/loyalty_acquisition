@@ -154,6 +154,58 @@
             color: #999;
             font-size: 0.9rem;
         }
+        /* 1. Genel Font Boyutunu Küçültme */
+body {
+    font-size: 14px; /* Standart metin boyutu */
+    line-height: 1.4; /* Satır aralıklarını sıkılaştır */
+}
+
+/* 2. Ana Başlık (Genel Bakış...) Alanını Daraltma */
+h1 {
+    font-size: 2rem !important; /* Başlık puntosunu düşür */
+    margin-bottom: 0.5rem !important; /* Alt boşluğu azalt */
+    margin-top: 1rem !important; /* Üst boşluğu azalt */
+}
+
+/* Açıklama metni (Saha satış ekibini...) */
+.lead, p.subtitle { 
+    font-size: 1rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* 3. Ara Başlıklar (Beklenen Fayda, Akış ve Mantık) */
+h2, h3 {
+    font-size: 1.5rem !important;
+    margin-top: 1rem !important; /* Üstten gelen boşluğu kıs */
+    margin-bottom: 1rem !important;
+}
+
+/* 4. Kartların (Kutuların) İç ve Dış Boşluklarını Sıkılaştırma */
+.card, .box-container { 
+    padding: 1rem !important; /* Çerçeve içi boşluğu (padding) ciddi oranda azalt */
+    margin-bottom: 1rem !important; /* Kartların altındaki boşluğu azalt */
+}
+
+/* 5. Kart İçi İkon ve Metinleri Küçültme */
+.card-icon, i, svg {
+    font-size: 2rem !important; /* İkon boyutunu küçült (örneğin 3rem'den 2rem'e) */
+    margin-bottom: 0.5rem !important;
+}
+
+.card-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.card-text {
+    font-size: 0.85rem !important; /* Açıklama yazılarını ufalttık */
+}
+
+/* 6. Bölümler Arası Mesafeyi Kısma */
+section, .section-padding {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
     </style>
 </head>
 <body>
