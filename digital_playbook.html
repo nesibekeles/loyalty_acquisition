@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive One-Pager | Düğün.com B2B Playbook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --dc-pink: #e91e63;
+            --dc-dark: #2c3e50;
+            --light-bg: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+        
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Header */
+        .report-header {
+            border-bottom: 2px solid #eee;
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+        .logo-text {
+            color: var(--dc-pink);
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* Hero Section */
+        .hero-title {
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--dc-dark);
+            margin-bottom: 10px;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .summary-box {
+            background-color: #fff5f8;
+            border-left: 5px solid var(--dc-pink);
+            padding: 25px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        /* Metric Cards */
+        .metric-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            height: 100%;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--dc-pink);
+        }
+        .metric-icon {
+            font-size: 2.5rem;
+            color: var(--dc-pink);
+            margin-bottom: 15px;
+        }
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dc-dark);
+            margin-bottom: 10px;
+        }
+        .metric-desc {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* Timeline (Flow) Section */
+        .timeline-section {
+            background-color: var(--light-bg);
+            padding: 60px 0;
+            margin: 50px 0;
+        }
+        .step-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+            height: 100%;
+            border-top: 4px solid var(--dc-pink);
+        }
+        .step-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #eee;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 0;
+        }
+        .step-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Roadmap Checklist */
+        .roadmap-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+        }
+        .roadmap-check {
+            color: #ccc;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        .roadmap-check.checked {
+            color: var(--dc-pink);
+        }
+        
+        .badge-phase {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 30px 0;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="report-header d-flex justify-content-between align-items-center">
+            <div class="logo-text">
+                Düğün.com <span style="font-weight:300; color:#666; font-size:1.2rem;">| Executive Summary</span>
+            </div>
+            <div class="text-end">
+                <span class="d-block fw-bold text-dark">Konu: Saha Satış Dijital Sunum Projesi</span>
+                <small class="text-muted">Tarih: 04.01.2026</small>
+            </div>
+        </header>
+
+        <section class="mb-5">
+            <h1 class="hero-title">Genel Bakış: İş ortağım Playbook</h1>
+            <p class="hero-subtitle">Saha satış ekibini "Dijital" iş geliştirme danışmanına dönüştüren interaktif satış aracı.</p>
+            
+      
+        </section>
+
+        <section class="mb-5">
+            <h3 class="mb-4 brand-font fw-bold">Beklenen Fayda</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="metric-card">
+                        <i class="fas fa-chart-line metric-icon"></i>
+                        <div class="metric-value">Verim Odaklı</div>
+                        <div class="metric-desc">Sadece müşterinin işini nasıl büyüteceğine odaklanır ve firmayı stratejik bir danışmanlık hizmeti almak için ön görüşmede gibi hissettirir. "Bana sadece ürünlerini satmak istiyorlar" düşüncesinden uzaklaştırır.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-card">
+                        <i class="fas fa-laptop-code metric-icon"></i>
+                        <div class="metric-value">Marka Algısı</div>
+                        <div class="metric-desc">Modern arayüzlü dijital bir sunum, "Düğün.com teknolojik bir güçtür" mesajını sözsüz olarak verir.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-card">
+                        <i class="fas fa-ruler-combined metric-icon"></i>
+                        <div class="metric-value">Standardizasyon</div>
+                        <div class="metric-desc">En deneyimli satışçı ile yeni başlayan personelin aynı kalitede ve tüm başlıkların üstünden geçecek şekilde sunum yapmasını sağlar.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="timeline-section">
+        <div class="container">
+            <h3 class="mb-4 brand-font fw-bold text-center">Playbook Akış ve Mantığı</h3>
+            <p class="text-center text-muted mb-5" style="max-width: 700px; margin: 0 auto;">Dijital Sunum, belirli bir psikolojik ikna stratejisi üzerine kurgulanmalıdır.</p>
+            
+            <div class="row g-4">
+                <div class="col-md">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5 class="fw-bold">Giriş & Otorite</h5>
+                            <p class="small text-muted mb-2">Modül: Hero Section</p>
+                            <p class="fw-bold text-danger" style="font-size: 0.9rem;">"Biz pazarın lideriyiz. Bizimle olmayan görünmez olur."</p>
+                            <p class="small">Google dominasyonu ve 19 yıllık liderlik vurgusu ile güven inşası.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5 class="fw-bold">FOMO & Kanıt</h5>
+                            <p class="small text-muted mb-2">Modül: Başarı Hikayeleri</p>
+                            <p class="fw-bold text-danger" style="font-size: 0.9rem;">"Rakipleriniz burada ve kazanıyor. Siz eksiksiniz."</p>
+                            <p class="small">Riva's Club vb. örneklerle sosyal kanıt ve kaybetme korkusu yaratma.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5 class="fw-bold">Çözüm & Güç</h5>
+                            <p class="small text-muted mb-2">Modül: Düğün.com Verimi</p>
+                            <p class="fw-bold text-danger" style="font-size: 0.9rem;">"Sadece site değil, 360° iş ortağınızız."</p>
+                            <p class="small">Instagram gücü, PY ve Akademi desteği, Rakip/sektör analizleri, Wedding planner avantajını vurgulama.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5 class="fw-bold">Kapanış & Kampanya</h5>
+                            <p class="small text-muted mb-2">Modül: ROI Hesaplayıcı</p>
+                            <p class="fw-bold text-danger" style="font-size: 0.9rem;">"Maliyet değil, yatırım."</p>
+                            <p class="small">Sadece 1-2 satışla tüm maliyeti çıkardığını matematiksel olarak kanıtlama. Kısıtlı süreli kampanyalar ile bu hesaplamayı birleştirip satış kapama.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="mb-5">
+            <h3 class="mb-4 brand-font fw-bold">Brainstorming & Roadmap (Gelecek Fazlar)</h3>
+            <p class="text-muted mb-4">Taslak Playbook çeşitli fikirlerle geliştirilebilir, aşağıda birkaç örnek eklendi.</p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-tools text-primary me-2"></i>Teknik Eklentiler</h5>
+                    
+                    <div class="roadmap-item">
+                        <i class="far fa-square roadmap-check"></i>
+                        <div>
+                            <strong>Offline Mode</strong>
+                            <div class="small text-muted">İnternetin çekmediği lokasyonlarda sunumun kesintisiz çalışması.</div>
+                        </div>
+                        <span class="badge-phase">Faz 2</span>
+                    </div>
+
+                    <div class="roadmap-item">
+                        <i class="far fa-square roadmap-check"></i>
+                        <div>
+                            <strong>Panel Simülasyon</strong>
+                            <div class="small text-muted">Sunumun içine gömülü bir "Canlı Demo" butonu ile; bir firmanın gözünden Düğün.com deneyimini gösteren kısa bir interaktif modül.</div>
+                        </div>
+                        <span class="badge-phase">Faz 2</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-lightbulb text-warning me-2"></i>İçerik Fikirleri</h5>
+                    
+                    <div class="roadmap-item">
+                        <i class="far fa-square roadmap-check"></i>
+                        <div>
+                            <strong>Firmaya Özel Opsiyonlar</strong>
+                            <div class="small text-muted">Firmanın Kategori-Lokasyon-Segmenti'ne göre farklılaşan içerikler. Örn. "Kadıköy" seçtiğinde, kampanyaların ve rakip başarı hikayelerinin sadece o bölgeden gelmesi.</div>
+                        </div>
+                        <span class="badge-phase">Faz 2</span>
+                    </div>
+
+                    <div class="roadmap-item">
+                        <i class="far fa-square roadmap-check"></i>
+                        <div>
+                            <strong>Satış Pusulası</strong>
+                            <div class="small text-muted">Sık gelen itirazlar / sorular / şüphe duyulan noktalar; ve  verilmesi gereken cevaplar bölümü. Sunumu açmadan önce yapılan işaretlemeler ile, firmanın sorularına nokta atışı cevap veren bir akıştaki sunum dinamik bir şekilde oluşur.</div>
+                        </div>
+                        <span class="badge-phase">Fikir</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="text-center p-5 bg-light rounded mt-5">
+            <h4 class="fw-bold mb-3">Playbook'u İnceleyin</h4>
+            <p class="text-muted">Taslak versiyondaki tasarım ve içerik üstünden kontrol edilebilir.</p>
+            <a href="https://nesibekeles.github.io/loyalty_acquisition/dugun.com_playbook.html" class="btn btn-dark btn-lg px-5" role="button" aria-disabled="false">Canlı Önizleme (Demo)</a>
+        </div>
+
+        <footer>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    &copy; 2026 Düğün.com Acquisiton & Loyalty
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>
+
