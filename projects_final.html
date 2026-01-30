@@ -183,6 +183,14 @@
         .content-spacer {
             padding: 1.5rem 1.5rem 1.5rem 2rem; /* Left padding increased */
         }
+		 .flow-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .flow-step {
+            background: white; border: 1px solid var(--border-light); padding: 6px 10px;
+            border-radius: 4px; text-align: center; font-size: 11px; min-width: 70px;
+        }
+        .flow-step b { display: block; color: var(--accent-pink); margin-bottom: 2px; }
+        .flow-arr { color: var(--text-light); }
+
     </style>
 </head>
 <body>
@@ -468,14 +476,25 @@
                 <div class="alert alert-light border shadow-sm mb-4">
                     <div class="row">
                         <div class="col-md-6 border-end">
-                            <strong><i class="fas fa-history text-muted"></i> Güncel Oranlar:</strong> %25-30-35 indirim
+                            <strong><i class="fas fa-history text-muted"></i> Sabit İndirim Oranları:</strong> %25-30-35 indirim
                         </div>
                         <div class="col-md-6">
-                            <strong><i class="fas fa-magic text-brand"></i> Önerilen Oranlar:</strong> <span class="text-success fw-bold">%20-25-30 indirim</span>
+                            <strong><i class="fas fa-magic text-brand"></i> Ek Kategori:</strong> <span class="text-success fw-bold">Asıl işi düğün olmayan kategoriler için %50 indirim</span>
                         </div>
 			<div class="col-12 mt-2 pt-2 border-top small">
-    <div class="text-danger mb-1">*Ek kategoriye %50 indirim ve Churn firmalara özel %40 indirim de kaldırılır.</div>
-    <div class="text-success">*Ek kategoriye ilk 3 ay üst paket devam eder.</div>
+    <div class="text-danger mb-1">*Churn firmalara özel %40 indirim kaldırılır.</div>
+    <div class="text-success">*Ek kategoriye ilk 3 ay üst paket veya şimdi al sonra öde kullanılır. İki eş zamanlı kampanya olarak kullanılmaz.</div>
+	 <div class="flow-container">
+                                <div class="flow-step"><b>Liste Fiyatı</b>50K</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>İlk Müşteri</b>%30 İnd.</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>Hızlı Başlangıç</b>Upgrade</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>Dondurma</b>Hakkı</div>
+                                <span class="flow-arr">&rarr;</span>
+                                <div class="flow-step"><b>İade</b>Garantisi</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -837,4 +856,5 @@
 </body>
 
 </html>
+
 
