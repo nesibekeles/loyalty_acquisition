@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diyarbakır Düğün Planlama - En İyi Firmalar & Fiyatlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fafafa; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        
+        /* Story Halkaları */
+        .story-ring {
+            background: linear-gradient(45deg, #FF4D8D, #FF8E53);
+            padding: 2px;
+            border-radius: 50%;
+        }
+        
+        /* Modern Kart Hover Efekti */
+        .firm-card {
+            transition: all 0.3s ease;
+        }
+        .firm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Sticky Footer */
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid #eee;
+        }
+
+        /* Badge Stili */
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .badge-purple { background-color: #F3E8FF; color: #7E22CE; }
+        .badge-pink { background-color: #FCE7F3; color: #BE185D; }
+        .badge-green { background-color: #DCFCE7; color: #15803D; }
+        .badge-blue { background-color: #E0F2FE; color: #0369A1; }
+    </style>
+</head>
+<body class="pb-24"> 
+    <header class="relative h-[420px] w-full overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://github.com/nesibekeles/loyalty_acquisition/blob/main/diyarbakir_banner.jpg?raw=true">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70"></div>
+        </div>
+
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+            <span class="bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest">Diyarbakır Düğün Rehberi</span>
+            <h1 class="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                Hayalindeki Düğün <br> <span class="text-pink-200 italic">Burada Başlıyor</span>
+            </h1>
+            
+            <div class="w-full max-w-2xl bg-white p-2 rounded-full shadow-2xl flex items-center transform transition hover:scale-[1.01]">
+                <div class="pl-6 text-gray-400"><i class="fas fa-search text-lg"></i></div>
+                <input type="text" placeholder="Mekan, fotoğrafçı veya gelinlik ara..." class="w-full p-3 md:p-4 outline-none text-gray-700 placeholder-gray-400 bg-transparent text-sm md:text-base">
+                <button class="bg-pink-600 hover:bg-pink-700 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-full font-bold transition shadow-lg text-sm md:text-base">Bul</button>
+            </div>
+            
+            <div class="mt-6 flex flex-wrap justify-center gap-4 text-white/90 text-xs md:text-sm font-medium">
+                <span class="bg-black/30 px-3 py-1 rounded-lg backdrop-blur-sm"><i class="fas fa-check text-pink-400 mr-2"></i>250+ Onaylı Firma</span>
+                <span class="bg-black/30 px-3 py-1 rounded-lg backdrop-blur-sm"><i class="fas fa-tag text-pink-400 mr-2"></i>Özel İndirimler</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="container mx-auto px-4 -mt-10 relative z-20 mb-8">
+        <div class="bg-white rounded-2xl shadow-xl p-4 md:p-6 flex justify-between md:justify-center md:gap-12 overflow-x-auto scrollbar-hide border border-gray-100">
+            <div class="flex flex-col items-center min-w-[70px] cursor-pointer group">
+                <div class="story-ring group-hover:scale-105 transition">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-white bg-gray-50 flex items-center justify-center text-pink-600">
+                        <i class="fas fa-glass-cheers text-xl md:text-2xl"></i>
+                    </div>
+                </div>
+                <span class="mt-2 text-xs font-bold text-gray-700">Mekanlar</span>
+            </div>
+            <div class="flex flex-col items-center min-w-[70px] cursor-pointer group">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 group-hover:bg-pink-50 group-hover:text-pink-600 transition">
+                    <i class="fas fa-camera text-xl md:text-2xl"></i>
+                </div>
+                <span class="mt-2 text-xs font-bold text-gray-700">Fotoğraf</span>
+            </div>
+            <div class="flex flex-col items-center min-w-[70px] cursor-pointer group">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 group-hover:bg-pink-50 group-hover:text-pink-600 transition">
+                    <i class="fas fa-user-tie text-xl md:text-2xl"></i>
+                </div>
+                <span class="mt-2 text-xs font-bold text-gray-700">Damatlık</span>
+            </div>
+            <div class="flex flex-col items-center min-w-[70px] cursor-pointer group">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 group-hover:bg-pink-50 group-hover:text-pink-600 transition">
+                    <i class="fas fa-crown text-xl md:text-2xl"></i>
+                </div>
+                <span class="mt-2 text-xs font-bold text-gray-700">Gelinlik</span>
+            </div>
+             <div class="flex flex-col items-center min-w-[70px] cursor-pointer group">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 group-hover:bg-pink-50 group-hover:text-pink-600 transition">
+                    <i class="fas fa-spa text-xl md:text-2xl"></i>
+                </div>
+                <span class="mt-2 text-xs font-bold text-gray-700">Kuaför</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 mb-20">
+        <div class="flex items-center justify-between mb-8 bg-pink-50 p-5 rounded-xl border-l-4 border-pink-600 shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-xl animate-pulse">
+                    🔥
+                </div>
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">Düğün.com'a Özel Fırsatlar</h2>
+                    <p class="text-xs text-pink-700 font-medium hidden md:block">Bu aya özel indirimleri kaçırma!</p>
+                </div>
+            </div>
+            <a href="#" class="bg-white text-pink-600 px-5 py-2 rounded-full text-sm font-bold shadow-sm hover:shadow-md hover:scale-105 transition border border-pink-100">
+                Tümünü Gör <i class="fas fa-arrow-right text-xs ml-1"></i>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="relative rounded-2xl overflow-hidden group h-64 shadow-lg cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-md shadow-lg">%20 İNDİRİM</span>
+                <div class="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 class="font-bold text-xl mb-1">Grand Diyarbakır Hotel</h3>
+                    <p class="text-sm opacity-90 mb-3">Kış düğünlerinde menü tadımı ücretsiz & %20 indirim.</p>
+                    <span class="text-xs font-bold bg-white/20 px-2 py-1 rounded backdrop-blur-sm">Son 3 Gün</span>
+                </div>
+            </div>
+            
+             <div class="relative rounded-2xl overflow-hidden group h-64 shadow-lg cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1621621667797-e06afc217fb0?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-md shadow-lg">ALBÜM HEDİYE</span>
+                <div class="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 class="font-bold text-xl mb-1">Stüdyo Amed</h3>
+                    <p class="text-sm opacity-90 mb-3">Dış çekim paketinde panoramik albüm hediye.</p>
+                    <span class="text-xs font-bold bg-white/20 px-2 py-1 rounded backdrop-blur-sm">Sınırlı Kontenjan</span>
+                </div>
+            </div>
+            
+             <div class="relative rounded-2xl overflow-hidden group h-64 shadow-lg cursor-pointer">
+                <img src="https://github.com/nesibekeles/loyalty_acquisition/blob/main/elegance.jpg?raw=true" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-md shadow-lg">ERKEN REZERVASYON</span>
+                <div class="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 class="font-bold text-xl mb-1">Elegance Balo Salonu</h3>
+                    <p class="text-sm opacity-90 mb-3">2026 kayıtlarında 2025 fiyatları sabit.</p>
+                    <span class="text-xs font-bold bg-white/20 px-2 py-1 rounded backdrop-blur-sm">Mart Sonu Bitiyor</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 mb-20">
+        <div class="text-center mb-12">
+            <span class="text-pink-600 font-bold tracking-widest text-xs uppercase bg-pink-50 px-3 py-1 rounded-full">EDİTÖRÜN SEÇİMİ</span>
+            <h2 class="text-3xl md:text-4xl font-bold mt-3 text-gray-900">Diyarbakır'ın En Seçkin Firmaları</h2>
+            <p class="text-gray-500 mt-2 max-w-2xl mx-auto">Çiftlerin en çok tercih ettiği, yüksek puanlı ve kaliteli hizmet veren firmaları senin için derledik.</p>
+        </div>
+
+        <div class="mb-16">
+            <div class="flex items-end justify-between mb-6 border-b border-gray-200 pb-4">
+                <div class="flex items-center">
+                    <div class="bg-gradient-to-tr from-pink-500 to-orange-400 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg mr-4">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">Popüler Mekanlar</h3>
+                        <p class="text-xs text-gray-500">Düğün salonları, kır düğünü ve oteller</p>
+                    </div>
+                </div>
+                <a href="#" class="hidden md:block text-gray-500 hover:text-pink-600 text-sm font-semibold transition">Hepsini Gör (45)</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">4.9</span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 flex gap-2">
+                             <span class="bg-black/60 backdrop-blur text-white text-[10px] px-2 py-1 rounded">500-750 Kişi</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Altın Köşk Düğün Salonu</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Kayapınar, Diyarbakır</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-purple">Yüksek Tavan</span>
+                            <span class="badge badge-pink">Gelin Odası VIP</span>
+                            <span class="badge badge-green">Otopark Var</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div class="text-xs text-gray-400">Başlangıç Fiyatı <br><span class="text-gray-900 font-bold text-sm">₺50.000 - ₺70.000</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                        <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">4.7</span>
+                        </div>
+                         <div class="absolute bottom-3 left-3 flex gap-2">
+                             <span class="bg-black/60 backdrop-blur text-white text-[10px] px-2 py-1 rounded">1000+ Kişi</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Sur Garden Kır Bahçesi</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Sur, Dicle Kenarı</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-green">Kır Düğünü</span>
+                            <span class="badge badge-blue">Nehir Manzaralı</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div class="text-xs text-gray-400">Kişi Başı <br><span class="text-gray-900 font-bold text-sm">₺300 - ₺450</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                        <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">5.0</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Divan Otel Balo Salonu</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Yenişehir</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-purple">Lüks</span>
+                            <span class="badge badge-pink">Konaklama Dahil</span>
+                            <span class="badge badge-blue">After Party</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div class="text-xs text-gray-400">Kişi Başı <br><span class="text-gray-900 font-bold text-sm">₺750+</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-16">
+            <div class="flex items-end justify-between mb-6 border-b border-gray-200 pb-4">
+                <div class="flex items-center">
+                    <div class="bg-gradient-to-tr from-purple-500 to-pink-400 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg mr-4">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">Gelinlik & Modaevleri</h3>
+                        <p class="text-xs text-gray-500">Özel dikim ve kiralama seçenekleri</p>
+                    </div>
+                </div>
+                <a href="#" class="hidden md:block text-gray-500 hover:text-pink-600 text-sm font-semibold transition">Hepsini Gör (20)</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                        <img src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover object-top">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">4.8</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Peri Gelinlik</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Yenişehir</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-pink">Kiralama</span>
+                            <span class="badge badge-purple">Özel Dikim</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                             <div class="text-xs text-gray-400">Kiralama Fiyatı <br><span class="text-gray-900 font-bold text-sm">₺15.000'den</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+                 <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                        <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover object-top">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">4.5</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Aysira Diyarbakır</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Kayapınar</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-blue">Hazır Model</span>
+                            <span class="badge badge-green">Hızlı Teslim</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div class="text-xs text-gray-400">Satış Fiyatı <br><span class="text-gray-900 font-bold text-sm">₺25.000'den</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+             <div class="flex items-end justify-between mb-6 border-b border-gray-200 pb-4">
+                <div class="flex items-center">
+                    <div class="bg-gradient-to-tr from-blue-500 to-cyan-400 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg mr-4">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">Fotoğraf Stüdyoları</h3>
+                        <p class="text-xs text-gray-500">Dış çekim, hikaye ve drone çekimi</p>
+                    </div>
+                </div>
+                <a href="#" class="hidden md:block text-gray-500 hover:text-pink-600 text-sm font-semibold transition">Hepsini Gör (18)</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                        <img src="https://github.com/nesibekeles/loyalty_acquisition/blob/main/photo.jpg?raw=true" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">4.9</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Mehmet Yılmaz Wedding</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Şehir Geneli</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-purple">Drone</span>
+                            <span class="badge badge-blue">Save the Date</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                             <div class="text-xs text-gray-400">Paket Fiyatı <br><span class="text-gray-900 font-bold text-sm">₺8.000'den</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+                 <div class="firm-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group cursor-pointer">
+                    <div class="relative h-60">
+                         <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover">
+                        <div class="absolute top-3 right-3 bg-white px-2 py-1 rounded-md shadow-sm flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs font-bold text-gray-800">5.0</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-pink-600 transition">Diyarbakır Hikayesi</h4>
+                        <p class="text-gray-500 text-sm mb-3"><i class="fas fa-map-marker-alt text-pink-500 mr-1"></i> Sur</p>
+                        
+                        <div class="mb-4 flex flex-wrap gap-1">
+                            <span class="badge badge-pink">Belgesel Düğün</span>
+                            <span class="badge badge-green">Tüm Gün</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                             <div class="text-xs text-gray-400">Paket Fiyatı <br><span class="text-gray-900 font-bold text-sm">₺12.000'den</span></div>
+                            <button class="bg-gray-900 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-pink-600 transition"><i class="fas fa-chevron-right text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-gray-100 py-16">
+        <div class="container mx-auto px-4 flex flex-col gap-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Haritada Keşfet</h2>
+                <p class="text-gray-500">Konumuna en yakın firmaları harita üzerinde incele.</p>
+            </div>
+            
+            <div class="bg-white p-2 rounded-2xl shadow-xl border border-gray-200 h-[450px] relative overflow-hidden">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50085.60231908298!2d40.2109825!3d37.915832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40751f8b4463d12d%3A0x633d262174c35626!2zRGl5YXJiYWvEsXIsIERpeWFyYmFrxLFyIE1lcmtlei9EaXlhcmJha8Sxcg!5e0!3m2!1str!2str!4v1650000000000!5m2!1str!2str" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0; border-radius: 12px;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+                
+                <div class="absolute bottom-6 left-6 bg-white p-4 rounded-xl shadow-2xl max-w-xs hidden md:block animate-fade-in-up">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+                            <i class="fas fa-map-marked-alt text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">450+ Firma Listelendi</h4>
+                            <p class="text-xs text-gray-500">Kayapınar bölgesinde yoğunluk var.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="container mx-auto px-4 py-16 max-w-3xl">
+         <h2 class="text-2xl font-bold text-center mb-8">Diyarbakır'da Düğün Yapacak Çiftler İçin İpuçları</h2>
+         <div class="space-y-4">
+             <div class="border border-gray-200 rounded-lg p-4 bg-white hover:bg-gray-50 cursor-pointer transition">
+                 <h4 class="font-bold text-gray-800 flex justify-between">Diyarbakır'da düğün fiyatları ortalama ne kadar? <i class="fas fa-chevron-down text-gray-400"></i></h4>
+             </div>
+              <div class="border border-gray-200 rounded-lg p-4 bg-white hover:bg-gray-50 cursor-pointer transition">
+                 <h4 class="font-bold text-gray-800 flex justify-between">Kır düğünü için en uygun aylar hangileri? <i class="fas fa-chevron-down text-gray-400"></i></h4>
+             </div>
+         </div>
+    </section>
+
+    <div class="sticky-bar py-4 px-6 shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex bg-pink-600 text-white w-10 h-10 rounded-full items-center justify-center font-bold">
+                    ?
+                </div>
+                <div>
+                    <p class="font-bold text-gray-900 text-sm md:text-base">Karar veremedin mi?</p>
+                    <p class="text-xs text-gray-500 hidden md:block">Düğün asistanımız sana en uygun 5 firmadan fiyat alsın.</p>
+                </div>
+            </div>
+            <button class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-6 md:px-10 py-3 rounded-full font-bold text-sm md:text-base shadow-lg transition transform hover:-translate-y-1">
+                Ücretsiz Teklif Al
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

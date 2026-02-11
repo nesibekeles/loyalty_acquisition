@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diyarbakır Düğün Rehberi | Düğün.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e63585;
+      --primary-dark: #c62870;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --success: #0e9f6e;
+      --warning: #f59e0b;
+      --shadow: 0 12px 32px rgba(16, 24, 40, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.45;
+    }
+
+    .container { width: min(1180px, 92vw); margin: 0 auto; }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      gap: 20px;
+    }
+
+    .brand { font-weight: 800; letter-spacing: -.3px; font-size: 21px; }
+    .brand span { color: var(--primary); }
+
+    .search {
+      flex: 1;
+      max-width: 540px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+    }
+
+    .search input {
+      border: 0;
+      outline: 0;
+      width: 100%;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .hero {
+      background: radial-gradient(circle at 70% 20%, rgba(230, 53, 133, .16), transparent 40%),
+                  linear-gradient(135deg, #fff 0%, #fff4fa 100%);
+      border: 1px solid #ffd8ea;
+      border-radius: 28px;
+      margin: 20px auto 26px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffe7f4;
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    h1 { margin: 12px 0; font-size: clamp(28px, 4vw, 44px); line-height: 1.08; letter-spacing: -1px; }
+
+    .hero p { margin: 0 0 20px; color: #4b5563; max-width: 62ch; }
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { border-color: var(--border); color: var(--ink); background: #fff; }
+
+    .hero-side {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .kpi { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .kpi-item { background: #fafafa; border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+    .kpi-item strong { display: block; font-size: 20px; }
+    .kpi-item span { color: var(--muted); font-size: 13px; }
+
+    .section { margin: 26px 0; }
+    .section h2 { margin: 0 0 12px; font-size: 26px; letter-spacing: -.4px; }
+    .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .section-head a { color: var(--primary-dark); text-decoration: none; font-weight: 600; }
+
+    .discounts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .discount {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discount::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 6px;
+      background: linear-gradient(#ff8ec8, var(--primary));
+    }
+
+    .chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .chip.success { background: #e8fff6; color: var(--success); }
+    .chip.warn { background: #fff7e7; color: #b45309; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .map-box {
+      height: 320px;
+      border-radius: 14px;
+      border: 1px dashed #f7a8d0;
+      background:
+        linear-gradient(45deg, #fff7fb 25%, transparent 25%),
+        linear-gradient(-45deg, #fff7fb 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #fff7fb 75%),
+        linear-gradient(-45deg, transparent 75%, #fff7fb 75%);
+      background-size: 28px 28px;
+      background-position: 0 0, 0 14px, 14px -14px, -14px 0;
+      display: grid;
+      place-items: center;
+      color: #9d174d;
+      font-weight: 700;
+    }
+
+    .pins { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .pin { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 8px 12px; font-size: 12px; }
+
+    .list { display: grid; gap: 10px; }
+
+    .fav-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .fav-item small { color: var(--muted); display: block; }
+
+    .tips { display: grid; gap: 10px; }
+    .tip {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: linear-gradient(180deg, #fff, #fffbfd);
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .category {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .vendor-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .vendor {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .vendor-cover {
+      height: 150px;
+      background: linear-gradient(135deg, #ffd7ec, #ffeef7 56%, #f6f8ff);
+      display: grid;
+      place-items: center;
+      color: #831843;
+      font-weight: 700;
+    }
+
+    .vendor-body { padding: 12px; }
+    .vendor-title { margin: 0 0 4px; font-size: 16px; }
+    .meta { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .rating { color: #f59e0b; font-size: 13px; font-weight: 700; }
+    .price { font-size: 13px; color: #14532d; font-weight: 700; }
+
+    .must-have {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .footer {
+      margin: 28px 0 36px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid, .layout { grid-template-columns: 1fr; }
+      .discounts { grid-template-columns: 1fr 1fr; }
+      .categories, .vendor-grid { grid-template-columns: repeat(2, 1fr); }
+      .must-have { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .discounts, .categories, .vendor-grid { grid-template-columns: 1fr; }
+      .topbar-inner { flex-wrap: wrap; padding: 10px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Düğün<span>.com</span> Diyarbakır</div>
+      <label class="search">
+        🔎
+        <input type="text" value="Diyarbakır'da mekan, fotoğrafçı, gelinlik..." aria-label="Arama" />
+      </label>
+      <a class="btn btn-secondary" href="#">Giriş Yap</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Diyarbakır İl Düğün Rehberi</span>
+          <h1>Diyarbakır'da düğünle ilgili aradığın <span style="color:var(--primary)">her şey burada</span>.</h1>
+          <p>
+            En iyi fiyatlar, en iyi firmalar, Düğün.com'a özel indirimler, sezon önerileri ve gerçek çift yorumları tek sayfada.
+            Araştırmanı hızlandır, bütçeni koru, hayalindeki düğünü planla.
+          </p>
+          <div class="cta-row">
+            <a href="#kategoriler" class="btn btn-primary">Firmaları Keşfet</a>
+            <a href="#indirimler" class="btn btn-secondary">Özel İndirimleri Gör</a>
+          </div>
+        </div>
+        <aside class="hero-side">
+          <h3 style="margin-top:0">Bu ay Diyarbakır'da</h3>
+          <div class="kpi">
+            <div class="kpi-item"><strong>100+</strong><span>Doğrulanmış firma</span></div>
+            <div class="kpi-item"><strong>50+</strong><span>Gerçek çift yorumu</span></div>
+            <div class="kpi-item"><strong>%45'e varan</strong><span>Özel indirim</span></div>
+            <div class="kpi-item"><strong>6 saat</strong><span>Hızlı teklif dönüşü</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="indirimler" class="section">
+      <div class="section-head"><h2>Düğün.com'a özel indirimler</h2><a href="#">Tüm kampanyalar</a></div>
+      <div class="discounts">
+        <article class="discount">
+          <span class="chip success">Mekan</span>
+          <h3>Hevsel Garden Balo</h3>
+          <p>Nisan sonuna kadar anlaşan çiftlere hafta içi paketlerde <strong>%25 indirim</strong>.</p>
+        </article>
+        <article class="discount">
+          <span class="chip warn">Fotoğrafçı</span>
+          <h3>Lens 21 Wedding</h3>
+          <p>Dış çekim + klip paketinde <strong>2.500 TL</strong> Düğün.com kuponu.</p>
+        </article>
+        <article class="discount">
+          <span class="chip success">Gelinlik</span>
+          <h3>Sur Bridal Atelier</h3>
+          <p>İkinci prova ücretsiz + duvak hediyesi. Sadece bu sayfaya özel.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section layout">
+      <article class="card">
+        <div class="section-head"><h2>Diyarbakır düğün haritası</h2><a href="#">Haritada filtrele</a></div>
+        <div class="map-box">📍 İnteraktif harita alanı (mekan/firma yoğunluk görünümü)</div>
+        <div class="pins">
+          <span class="pin">Sur</span>
+          <span class="pin">Yenişehir</span>
+          <span class="pin">Bağlar</span>
+          <span class="pin">Kayapınar</span>
+          <span class="pin">Diclekent</span>
+        </div>
+      </article>
+
+      <aside class="card">
+        <h2 style="font-size:22px">Favorilerin</h2>
+        <div class="list">
+          <div class="fav-item"><div><strong>Royal Garden</strong><small>Mekan • 4.8 ★</small></div><span>❤</span></div>
+          <div class="fav-item"><div><strong>Mina Gelinlik</strong><small>Gelinlikçi • 4.7 ★</small></div><span>❤</span></div>
+          <div class="fav-item"><div><strong>Kare Atölye</strong><small>Fotoğrafçı • 4.9 ★</small></div><span>❤</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Yerel öneriler: Ne zaman, nasıl planlamalı?</h2><a href="#">Tüm rehberler</a></div>
+      <div class="tips">
+        <article class="tip"><strong>Açık hava düğünü için en uygun dönem:</strong> Diyarbakır'da Mayıs ortası - Haziran sonu akşam saatleri sıcaklık/konfor dengesi açısından idealdir.</article>
+        <article class="tip"><strong>Bütçe tüyosu:</strong> Cuma akşamı veya Pazar gündüz organizasyonlarında mekan maliyeti ortalama %15-20 daha uygun olur.</article>
+        <article class="tip"><strong>Yoğun sezon uyarısı:</strong> Eylül-Ekim tarihlerinde popüler fotoğrafçılar 2-3 ay önceden dolduğu için erken teklif alın.</article>
+      </div>
+    </section>
+
+    <section id="kategoriler" class="section">
+      <h2>4 ana kategori</h2>
+      <div class="categories">
+        <div class="category">🏛️ Mekanlar</div>
+        <div class="category">👰 Gelinlikçiler</div>
+        <div class="category">📸 Fotoğrafçılar</div>
+        <div class="category">💄 Kuaförler</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Öne çıkan firmalar</h2><a href="#">Tümünü gör</a></div>
+      <div class="vendor-grid">
+        <article class="vendor">
+          <div class="vendor-cover">Royal Garden</div>
+          <div class="vendor-body"><h3 class="vendor-title">Royal Garden Düğün</h3><div class="meta">Mekan • Yenişehir</div><div class="rating">★ 4.8 (312 yorum)</div><div class="price">Kişi başı 450 TL'den başlayan fiyatlar</div></div>
+        </article>
+        <article class="vendor">
+          <div class="vendor-cover">Sur Bridal</div>
+          <div class="vendor-body"><h3 class="vendor-title">Sur Bridal Atelier</h3><div class="meta">Gelinlikçi • Sur</div><div class="rating">★ 4.7 (189 yorum)</div><div class="price">Özel dikim + prova paketleri</div></div>
+        </article>
+        <article class="vendor">
+          <div class="vendor-cover">Lens 21</div>
+          <div class="vendor-body"><h3 class="vendor-title">Lens 21 Wedding</h3><div class="meta">Fotoğrafçı • Kayapınar</div><div class="rating">★ 4.9 (401 yorum)</div><div class="price">Dış çekim paketleri 9.500 TL'den</div></div>
+        </article>
+        <article class="vendor">
+          <div class="vendor-cover">Bella Hair</div>
+          <div class="vendor-body"><h3 class="vendor-title">Bella Hair Studio</h3><div class="meta">Kuaför • Bağlar</div><div class="rating">★ 4.6 (124 yorum)</div><div class="price">Gelin saçı + makyaj paketleri</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Ücretsiz Düğün Planlama Araçları</h2>
+      <div class="must-have">
+        <article class="card"><h3>Bütçe Planlayıcı</h3><p>Kullanıcının toplam bütçeyi girip kategori bazlı dağılım önerisi alabileceği mini araç.</p></article>
+        <article class="card"><h3>Tarih & Hava Durumu İçgörüsü</h3><p>Son 5 yılın sıcaklık/yağış ortalamasına göre ay bazlı düğün tarihi önerisi.</p></article>
+        <article class="card"><h3>Toplu Teklif ve Karşılaştırma</h3><p>Aynı anda 5 firmadan teklif alıp fiyat/puan/yorum karşılaştırması yapma alanı.</p></article>
+      </div>
+    </section>
+
+    <p class="footer">Mockup çalışma • Diyarbakır il landing page yapısı • Düğün.com</p>
+  </main>
+</body>
+</html>
