@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Düğün.com Wallet Projesi - İş Analizi</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 40px; background: #fff; }
+        
+        h1 { color: #D61E6F; font-size: 32px; border-bottom: 2px solid #D61E6F; padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: #2c3e50; font-size: 24px; margin-top: 40px; margin-bottom: 15px; }
+        h3 { color: #555; font-size: 18px; margin-top: 25px; }
+        
+        .executive-summary { background-color: #fff0f6; padding: 20px; border-left: 5px solid #D61E6F; border-radius: 4px; margin-bottom: 30px; }
+        
+        .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .benefit-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; }
+        .benefit-title { font-weight: bold; color: #D61E6F; margin-bottom: 10px; display: block; }
+        
+        .financial-box { background-color: #e3f2fd; border: 1px solid #bbdefb; padding: 25px; border-radius: 8px; margin-top: 20px; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        .comparison-table th, .comparison-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .comparison-table th { background-color: #f1f8ff; color: #0056b3; }
+        
+        .highlight-red { color: #c0392b; font-weight: bold; }
+        .highlight-green { color: #27ae60; font-weight: bold; }
+        
+        .formula-box { font-family: 'Courier New', monospace; background: #333; color: #fff; padding: 15px; border-radius: 5px; margin: 10px 0; font-size: 14px; }
+	/* Açılır Kapanır Buton Tasarımı */
+.toggle-header {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 15px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+.toggle-header:hover {
+    background-color: #e9ecef;
+}
+
+/* Gizli İçerik Alanı */
+.toggle-content {
+    display: none; /* Başlangıçta gizli */
+    overflow: hidden;
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Siyah kutunun kenarlarını uyumlu hale getirme */
+.toggle-content .formula-box {
+    margin-top: 0;
+    border-radius: 0 0 8px 8px; /* Sadece alt köşeler yuvarlak */
+}
+
+/* Açık durumdayken başlığın alt köşelerini düzleştir */
+.toggle-header.active {
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: #e3f2fd; /* Açılınca hafif mavi olsun */
+    color: #0d47a1;
+}
+
+/* Basit açılma animasyonu */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    </style>
+</head>
+<body>
+
+    <h1>Düğün.com B2B Wallet Projesi</h1>
+    <p><strong>Tarih:</strong> 18 Şubat 2026<br><strong>Konu:</strong> B2B Müşteri Cüzdanı ve Magnet Ürün Satış Entegrasyonu</p>
+
+    <div class="executive-summary">
+        <strong>Özet:</strong> Wallet kurulumu ile, firmalarımızın magnet ürünlerini randevu maliyeti olmadan, kendi kendilerine satın alabilmelerini sağlayan dijital bir cüzdan altyapısı hedefliyoruz.
+ <div class="text-success">Amacımız; <strong>satış ekibinin vaktini düşük gelirli ek ürünlere değil, yüksek katma değerli Winner paketlere ayırmasını</strong> sağlamak ve magnet ürünleri için wallet'ı kullanarak hızlı satış + daha iyi cashflow yaratmak.</div> 
+<a href="https://nesibekeles.github.io/loyalty_acquisition/wallet_demo.html" target="_blank" class="btn btn-danger btn-lg">
+                            <i class="fas fa-dharmachakra me-2"></i> Demo Wallet Görünümü İçin Tıklayın 
+                        </a>
+    </div>
+
+    <h2>1. Projenin Temel Avantajları</h2>
+    <div class="benefits-grid">
+        <div class="benefit-card">
+            <span class="benefit-title">💰 Cashflow Artışı</span>
+            "Önce al, sonra harca" modeli ile firmalar cüzdanlarına bakiye yükler. Hizmet verilmeden önce nakit girişi sağlanır.
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-title">🎯 Satış İndirim Toolu</span>
+            Sadece magnet ürünleri değil, satış sırasında indirim olarak da sunulabilir. Firmadan alınan ödeme değişmeden, 20K'lık kısmı walleta yükletip gelecekte magnet ürün alımlarında kullanabilir.
+        </div>
+    <div class="benefit-card">
+            <span class="benefit-title">📈 Dinamik Fiyatlama</span>
+            Yüksek sezonda / talep yoğunluğunda magnet ürün fiyatları otomatik artırılabilir, ölü sezonda kampanyalarla talep yaratılabilir.
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-title">🎁 Müşteri Memnuniyeti Aracı</span>
+            Şikayet yönetiminde firmaya reklam çıkmak haricinde kullanabileceğimiz bir tool olur, "Wallet Bakiyesi" tanımlanarak ek hizmetleri alması sağlanır.
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-title">📌 Yeni Ürün Açılışını Hızlandırma</span>
+            Hayata geçirmek istediğimiz tüm magnet / booster ürünlerini hızlı bir şekilde satışa açabileceğiz.
+        </div>
+        <div class="benefit-card">
+            <span class="benefit-title">⚡ Operasyonel Verimlilik</span>
+            Magnet ürünlerin (listeleme ilk sıra, boost vb.) satışında randevu ve insan eforu maliyeti sıfıra iner. Satış otomatize edilir.
+        </div>
+    </div>
+    <h2>2. Finansal Analiz & Fırsat Maliyeti</h2>
+    <p>Mevcut durumda satış ekibinin düşük gelirli ek ürünleri satmak için randevu eforu harcaması maliyeti artıracak. Ayrıca bu durum, ana gelir kalemimiz olan <strong>yeni satışlardan feragat etmemize</strong> neden olacak.</p>
+
+    <div class="financial-box">
+        <h3>Listeleme İlk Sıra - Satış Senaryo Analizi</h3>
+	<p>Listeleme ilk sıra satışı için yaklaşık olarak 989 adet randevu gerçekleşmesi gerekiyor.</p>
+	
+<div class="toggle-header" onclick="toggleCalculation()">
+    <span>📝 Randevu Sayısı Hesaplama Detayı:</span>
+    <i class="fas fa-plus" id="toggleIcon"></i>
+</div>
+
+<div class="toggle-content" id="calculationBox">
+  <div class="formula-box">
+            1020 (Aylık Gerçekleşebilecek Maksimum "İlk Sıra" Satışı) <br>
+            x 9 (Yıllık maksimum satışı bulur-Nisandan itibaren satış olacağı için 9 ay) <br>
+            x 0,54 (Ortalama doluluk %54 olacağını öngörüyoruz) <br>
+            x 0,2 (1 randevuda ortalama 5 günlük "ilk sıra" satış yapılacağını düşünüyoruz) <br>
+            x 12 (Ay / LTV) <br>
+            ----------------------------------<br>
+            = <strong>Yaklaşık olarak 989 randevuya gidilmesi gerekiyor</strong>
+        </div>
+  </div>
+        <p>Aşağıdaki tabloda, 989 adet randevunun ek ürün satışı için harcanması ile ana paket satışı için harcanması arasındaki maliyet farkını gösterdik.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Metrik</th>
+                    <th>Senaryo A: Manuel Ek Ürün Satışı (Mevcut)</th>
+                    <th>Senaryo B: Wallet ile Otomasyon (Hedef)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Satış Yöntemi</td>
+                    <td>Fiziksel Randevu</td>
+                    <td><strong>Self-Service (Wallet)</strong></td>
+                </tr>
+                <tr>
+                    <td>Elde Edilen Gelir</td>
+                    <td>₺ 25.135.125,00</td>
+                    <td>₺ 25.135.125,00 (Otomatik)</td>
+                </tr>
+                <tr>
+                    <td>Kaybedilen Potansiyel Gelir*</td>
+                    <td class="highlight-red">- ₺ 11.166.368,00*</td>
+                    <td class="highlight-green">0 TL (Bu gelir kazanılır)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>*Hesaplama Detayı (Winner X Satış Potansiyeli)</h3>
+        <p>Eğer bu 1237 randevu hakkı, ek ürün yerine ana paket satışına ayrılsaydı:</p>
+        
+        <div class="formula-box">
+            989 (Randevu) <br>
+            x 3,3 (Ortalama X Satış Adedi) <br>
+            x 5.700 TL (Ortalama X Value) <br>
+            x 0,15 (Hit Rate - Dönüşüm) <br>
+	x 1/3 (Ek ürün satışı için randevu süresi) <br>
+            x 12 (Ay / LTV) <br>
+            ----------------------------------<br>
+            = <strong>₺ 11.166.368,40</strong>
+        </div>
+
+        <p style="margin-top:15px;">
+            <strong>Sonuç:</strong> Wallet projesi devreye alındığında, listeleme ilk sıra satışından gelecek 25 Milyon TL + satış ekibinin 989 randevusu ile yeni satışa <strong>11.2 Milyon TL</strong> ciro üretme kapasitesi korunacaktır. Fiziksel randevu yerine telefonda satış için de bunun 1/5'i maliyet (yaklaşık 2M) düşünülebilir.
+        </p>
+    </div>
+
+    <h2>3. Yol Haritası</h2>
+    <ul>
+        <li><strong>Faz 1:</strong> Wallet arayüzü, bakiye yükleme ve temel ürünlerin (Listeleme ilk sıra) listelenmesi.</li>
+        <li><strong>Faz 2:</strong> Dinamik fiyatlama modülü (Sezonsal katsayılar).</li>
+        <li><strong>Faz 3:</strong> Satış ekibinin "Promosyon Kodu" veya "Hediye Bakiye" tanımlayabileceği admin paneli.</li>
+    </ul>
+<script>
+    function toggleCalculation() {
+        var content = document.getElementById("calculationBox");
+        var header = document.querySelector(".toggle-header");
+        var icon = document.getElementById("toggleIcon");
+
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            header.classList.remove("active");
+            icon.classList.remove("fa-minus");
+            icon.classList.add("fa-plus");
+        } else {
+            content.style.display = "block";
+            header.classList.add("active");
+            icon.classList.remove("fa-plus");
+            icon.classList.add("fa-minus");
+        }
+    }
+</script>
+</body>
+</html>
