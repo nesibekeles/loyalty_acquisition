@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Düğün.com Partner Wallet - Final</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D61E6F;
+            --primary-dark: #ad1457;
+            --primary-light: #fce4ec;
+            --text-main: #2c3e50;
+            --text-light: #6c757d;
+            --bg-body: #f5f7fa;
+            --white: #ffffff;
+            --border-radius: 12px;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-body); margin: 0; color: var(--text-main); }
+        
+        /* Layout */
+        .app-container { display: flex; height: 100vh; }
+        .sidebar { width: 260px; background: var(--white); border-right: 1px solid #eee; padding: 20px; display: flex; flex-direction: column; }
+        .main-content { flex: 1; padding: 30px 50px; overflow-y: auto; position: relative; }
+
+        /* Sidebar Elements */
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .nav-item { padding: 12px 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-light); transition: 0.2s; font-weight: 500; }
+        .nav-item:hover, .nav-item.active { background-color: var(--primary-light); color: var(--primary); }
+        .nav-item.active { font-weight: 700; }
+
+        /* Info Banner */
+        .info-banner { background: linear-gradient(90deg, #2c3e50 0%, #4ca1af 100%); color: white; padding: 20px; border-radius: var(--border-radius); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
+        .banner-text h3 { margin: 0 0 5px 0; font-size: 18px; }
+        .banner-text p { margin: 0; opacity: 0.9; font-size: 14px; }
+        .banner-stat { text-align: right; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 8px; backdrop-filter: blur(5px); }
+        .stat-val { font-size: 20px; font-weight: bold; }
+        .stat-desc { font-size: 11px; }
+
+        /* Wallet Section */
+        .wallet-card { background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 2px 10px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border: 1px solid #eee; }
+        .balance-group label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .balance-amount { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
+        .balance-actions button { padding: 12px 24px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-deposit { background-color: var(--primary); color: white; }
+        .btn-deposit:hover { background-color: var(--primary-dark); }
+        .btn-history { background: transparent; color: var(--text-light); margin-right: 10px; }
+        .btn-history:hover { color: var(--text-main); text-decoration: underline; }
+
+        /* Products Grid */
+        .grid-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .product-card { background: white; border: 1px solid #e0e0e0; border-radius: var(--border-radius); padding: 0; overflow: hidden; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--primary); }
+        .card-header { padding: 20px; background: #fff; border-bottom: 1px solid #f0f0f0; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+        .badge-premium { background-color: #fff3e0; color: #e65100; }
+        .badge-basic { background-color: #e3f2fd; color: #1565c0; }
+        .card-body { padding: 20px; flex: 1; }
+        .p-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+        .p-desc { font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 15px; }
+        .p-price { font-size: 18px; font-weight: 700; color: var(--primary); }
+        .p-unit { font-size: 12px; color: var(--text-light); font-weight: normal; }
+        .card-footer { padding: 15px 20px; background: #fafafa; border-top: 1px solid #f0f0f0; }
+        .btn-action { width: 100%; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-action:hover { background: var(--primary); color: white; }
+
+        /* --- SUPPORT WIDGET (NEW) --- */
+        .support-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #eee;
+            z-index: 900;
+        }
+        .support-widget:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(214, 30, 111, 0.25); border-color: var(--primary-light); }
+        .support-icon { background: var(--primary-light); color: var(--primary); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .support-text div:first-child { font-weight: 700; font-size: 13px; color: var(--text-main); }
+        .support-text div:last-child { font-size: 11px; color: var(--text-light); }
+
+        /* --- MODAL --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-container { background: white; width: 950px; max-width: 95%; height: 85vh; border-radius: 16px; display: flex; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        
+        /* Modal Left: Preview Image */
+        .modal-left { width: 45%; background: #f8f9fa; padding: 30px; border-right: 1px solid #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        
+        .preview-wrapper {
+            position: relative;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+        }
+        
+        /* The Glow Effect around the image */
+        .preview-glow {
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            background: linear-gradient(45deg, var(--primary), #ff4081);
+            filter: blur(20px);
+            opacity: 0.4;
+            z-index: 0;
+            border-radius: 20px;
+            animation: glowPulse 3s infinite alternate;
+        }
+
+        .preview-image {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 2px solid white;
+        }
+
+        @keyframes glowPulse { from { opacity: 0.3; transform: scale(0.98); } to { opacity: 0.6; transform: scale(1.02); } }
+
+        /* Modal Right */
+        .modal-right { width: 55%; padding: 30px; display: flex; flex-direction: column; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-modal { cursor: pointer; font-size: 20px; color: #999; }
+        
+        .calendar-wrapper { margin-bottom: 20px; }
+        .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 10px;}
+        .day { aspect-ratio: 1; border: 1px solid #eee; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 12px; }
+        .day:hover:not(.disabled) { border-color: var(--primary); background: var(--primary-light); }
+        .day.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .day.disabled { background: #f5f5f5; color: #ccc; cursor: not-allowed; }
+        .day-price { font-size: 9px; margin-top: 2px; }
+
+        .checkout-area { margin-top: auto; border-top: 1px solid #eee; padding-top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .total-row { display: flex; justify-content: space-between; margin-top: 15px; font-size: 18px; font-weight: 800; color: var(--primary); }
+        .btn-buy { background: var(--primary); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-buy:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .warning-box { background: #fff3e0; border-left: 4px solid #ed6c02; padding: 15px; margin-bottom: 20px; border-radius: 4px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="logo"><img src="https://dugun.com/assets/images/logo/dugun.svg" alt="Düğün.com Logo"></div>
+            <div class="nav-item"><i class="fas fa-chart-pie"></i> Özet Panel</div>
+            <div class="nav-item"><i class="fas fa-calendar-alt"></i> Takvim</div>
+            <div class="nav-item active"><i class="fas fa-wallet"></i> Wallet & Ürünler</div>
+            <div class="nav-item"><i class="fas fa-bullhorn"></i> Kampanyalar</div>
+            <div class="nav-item"><i class="fas fa-cog"></i> Ayarlar</div>
+        </div>
+
+        <div class="main-content">
+            
+            <div class="info-banner">
+                <div class="banner-text">
+                    <h3>🚀 Teklif Sayını %45 Artırmak İster misin?</h3>
+                    <p>Wallet bakiyeni kullanarak 'Liste Başı' ürününü al, rakiplerinin 3 katı daha fazla görüntülen.</p>
+                </div>
+                <div class="banner-stat">
+                    <div class="stat-val">+124</div>
+                    <div class="stat-desc">Potansiyel Çift</div>
+                </div>
+            </div>
+
+            <div class="wallet-card">
+                <div class="balance-group">
+                    <label>Kullanılabilir Wallet Bakiyesi</label>
+                    <div class="balance-amount">₺ 8.250,00</div>
+                </div>
+                <div class="balance-actions">
+                    <button class="btn-history"><i class="fas fa-history"></i> Geçmiş</button>
+                    <button class="btn-deposit"><i class="fas fa-plus-circle"></i> Bakiye Yükle</button>
+                </div>
+            </div>
+
+            <div class="grid-title"><span>⚡ Hızlı Performans Ürünleri</span></div>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="card-header"><span class="badge badge-premium">En Popüler</span></div>
+                    <div class="card-body">
+                        <div class="p-title">Liste Başı Gösterim</div>
+                        <div class="p-desc">Kategorinizde arama sonuçlarında 1. sırada yer alın. Randevu gerektirmez.</div>
+                        <div class="p-price">2.000 TL <span class="p-unit">/ Günlük</span></div>
+                    </div>
+                    <div class="card-footer"><button class="btn-action" onclick="openModal('listing')">Tarih Seç & Satın Al</button></div>
+                </div>
+
+                <div class="product-card">
+                    <div class="card-header"><span class="badge badge-basic">Marka Bilinirliği</span></div>
+                    <div class="card-body">
+                        <div class="p-title">Vitrin (Showcase)</div>
+                        <div class="p-desc">Anasayfa vitrin alanında firmanızı sergileyin. <br><i>*Min. 50 fotoğraf şartı.</i></div>
+                        <div class="p-price">5.000 TL <span class="p-unit">/ Haftalık</span></div>
+                    </div>
+                    <div class="card-footer"><button class="btn-action" onclick="openModal('vitrin')">İncele & Satın Al</button></div>
+                </div>
+
+                 <div class="product-card">
+                    <div class="card-header"><span class="badge badge-premium">Sosyal Medya</span></div>
+                    <div class="card-body">
+                        <div class="p-title">Ad Booster (Instagram)</div>
+                        <div class="p-desc">Sizin adınıza Instagram'da yeniden pazarlama (retargeting) reklamı çıkıyoruz.</div>
+                        <div class="p-price">3.500 TL <span class="p-unit">/ 3 Günlük</span></div>
+                    </div>
+                    <div class="card-footer"><button class="btn-action">Detaylar</button></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="support-widget" onclick="alert('Canlı destek penceresi açılıyor...')">
+        <div class="support-icon"><i class="fas fa-headset"></i></div>
+        <div class="support-text">
+            <div>Desteğe mi ihtiyacınız var?</div>
+            <div>Müşteri temsilcimize ulaşın</div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-container">
+            
+            <div class="modal-left">
+                <div style="font-size:12px; font-weight:700; color:#aaa; text-transform:uppercase; margin-bottom:20px; letter-spacing:1px;">
+                    Canlı Önizleme
+                </div>
+                
+                <div class="preview-wrapper">
+                    <div class="preview-glow"></div>
+                    <img src="https://github.com/nesibekeles/loyalty_acquisition/blob/main/Listeleme%20%C4%B0lk%20S%C4%B1ra.png?raw=true" class="preview-image" alt="Liste Başı Önizleme">
+                </div>
+
+                <div style="margin-top:25px; text-align:center; font-size:13px; color:#555; max-width: 80%;">
+                    <i class="fas fa-check-circle" style="color:var(--success)"></i> 
+                    Seçtiğiniz tarihlerde firmanız, kategorisinde <strong>en üstte ve vurgulu</strong> olarak listelenecektir.
+                </div>
+            </div>
+
+            <div class="modal-right">
+                <div class="modal-header">
+                    <h2 style="margin:0;">Tarih Seçimi</h2>
+                    <div class="close-modal" onclick="closeModal()">&times;</div>
+                </div>
+
+                <div class="warning-box" id="conditionWarning">
+                    <div style="font-weight:bold; font-size:14px; color:#e65100; margin-bottom:5px;">
+                        <i class="fas fa-exclamation-triangle"></i> Koşul Sağlanamadı
+                    </div>
+                    <div style="font-size:13px;">Vitrin ürünü için en az 50 fotoğraf yüklemiş olmanız gerekmektedir.</div>
+                </div>
+
+                <div class="calendar-wrapper" id="calendarArea">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold;">
+                        <span>Mart 2026</span>
+                    </div>
+                    <div class="days-grid">
+                        <div class="day disabled">1</div> <div class="day disabled">2</div> <div class="day disabled">3</div>
+                        <div class="day" onclick="toggleDay(this, 2000)">4<div class="day-price">2.000₺</div></div>
+                        <div class="day" onclick="toggleDay(this, 2000)">5<div class="day-price">2.000₺</div></div>
+                        <div class="day" style="color:#e65100; font-weight:bold;" onclick="toggleDay(this, 3000)">6<div class="day-price">3.000₺</div></div>
+                        <div class="day" style="color:#e65100; font-weight:bold;" onclick="toggleDay(this, 3000)">7<div class="day-price">3.000₺</div></div>
+                        <div class="day" onclick="toggleDay(this, 2000)">8<div class="day-price">2.000₺</div></div>
+                        <div class="day" onclick="toggleDay(this, 2000)">9<div class="day-price">2.000₺</div></div>
+                        <div class="day" onclick="toggleDay(this, 2000)">10<div class="day-price">2.000₺</div></div>
+                    </div>
+                </div>
+
+                <div class="checkout-area">
+                    <div class="summary-row"><span>Gün Sayısı:</span> <span id="dayCount">0 Gün</span></div>
+                    <div class="summary-row"><span>Bakiye:</span> <span>8.250,00 TL</span></div>
+                    <div class="total-row"><span>Toplam:</span> <span id="totalPrice">0,00 TL</span></div>
+                    <button class="btn-buy" id="buyBtn" disabled>Cüzdan ile Öde ve Aktifleştir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let total = 0;
+        let days = 0;
+
+        function openModal(type) {
+            const modal = document.getElementById('purchaseModal');
+            const warning = document.getElementById('conditionWarning');
+            const calendar = document.getElementById('calendarArea');
+            const buyBtn = document.getElementById('buyBtn');
+
+            modal.classList.add('active');
+            warning.style.display = 'none';
+            calendar.style.opacity = '1';
+            calendar.style.pointerEvents = 'all';
+            buyBtn.disabled = true;
+            buyBtn.innerText = "Cüzdan ile Öde ve Aktifleştir";
+            buyBtn.style.background = "var(--primary)";
+
+            if (type === 'vitrin') {
+                warning.style.display = 'block';
+                calendar.style.opacity = '0.5';
+                calendar.style.pointerEvents = 'none';
+                buyBtn.disabled = true;
+                buyBtn.innerText = "Koşullar Sağlanmıyor";
+                buyBtn.style.background = "#ccc";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('purchaseModal').classList.remove('active');
+            total = 0; days = 0;
+            updateSummary();
+            document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));
+        }
+
+        function toggleDay(element, price) {
+            if (element.classList.contains('selected')) {
+                element.classList.remove('selected');
+                total -= price; days--;
+            } else {
+                element.classList.add('selected');
+                total += price; days++;
+            }
+            updateSummary();
+        }
+
+        function updateSummary() {
+            document.getElementById('dayCount').innerText = days + " Gün";
+            document.getElementById('totalPrice').innerText = total.toLocaleString('tr-TR') + " TL";
+            document.getElementById('buyBtn').disabled = days === 0;
+        }
+    </script>
+</body>
+</html>
