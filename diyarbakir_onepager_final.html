@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Summary: İl Bazlı LP Dönüşümü</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .print-container { max-width: 1200px; margin: 0 auto; background: white; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; background: #ffffff; height: 100%; }
+        .card-header { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; }
+        .icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 0.9rem; }
+        
+        /* Input stilleri */
+        input[type="number"] {
+            -moz-appearance: textfield;
+            font-weight: bold;
+            color: #1e293b;
+            background: transparent;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            width: 100%;
+            padding: 2px 4px;
+            transition: all 0.2s;
+        }
+        input[type="number"]:hover { border-color: #cbd5e1; background: #f8fafc; cursor: text; }
+        input[type="number"]:focus { outline: none; border-color: #22c55e; background: #fff; border-style: solid; }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        @media print {
+            body { background: white; }
+            .print-container { box-shadow: none; max-width: 100%; }
+            .no-print { display: none; }
+            input[type="number"] { border: none !important; background: transparent !important; }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="print-container rounded-2xl overflow-hidden relative">
+        <header class="bg-slate-900 text-white p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-pink-600 rounded-full opacity-20 blur-3xl -mr-10 -mt-10"></div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end relative z-10">
+                <div>
+                    <span class="bg-pink-500/20 text-pink-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-pink-500/30">Executive Project One-Pager</span>
+                    <h1 class="text-3xl font-bold mb-1">İl Bazlı Landing Page Dönüşümü</h1>
+                    <p class="text-slate-400 text-sm font-medium">Lokal Trafik & B2B Satış Artırma Projesi</p>
+                </div>
+                
+                <div class="mt-6 md:mt-0 text-left md:text-right bg-slate-800/50 p-4 rounded-xl border border-slate-700 backdrop-blur-sm">
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                        
+                        <div class="text-slate-400">Tarih:</div>
+                        <div class="font-semibold">Şubat 2026</div>
+                        <div class="text-slate-400">Durum:</div>
+                        <div class="font-semibold text-amber-400"><i class="fas fa-circle text-[8px] mr-1"></i> Planlama</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8 pb-0">
+            <div class="card bg-pink-50 border-pink-100 shadow-sm">
+                <div class="flex items-start">
+                    <div class="icon-box bg-pink-100 text-pink-600 mt-1"><i class="fas fa-bullseye"></i></div>
+                    <div>
+                        <h3 class="text-lg font-bold text-pink-900 mb-2">Vizyon & Ana Odak (B2B Satış)</h3>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            <strong>Asıl amacımız;</strong> halihazırda listeleme (listing) sayfalarımız olan ancak trafiğimizin ve marka bilinirliğimizin oldukça düşük olduğu illerde <span class="bg-pink-200/50 px-1 font-semibold">yeni trafik yaratmak ve kendimizi tanıtmaktır.</span> Çiftlerin o ildeki düğünle ilgili aradıkları her şeyi ve özel indirim fırsatlarını tek bir sayfada bulmasını sağlayarak bölgede bir çekim merkezi oluşturmak; nihayetinde bu trafiği kullanarak bölgedeki düğün profesyonellerine <strong>B2B (Listeleme/Üyelik) satışlarımızı artırmaktır.</strong>
+                        </p>
+
+    <div class="text-center mt-6 no-print space-y-2 mb-1">
+        <button onclick= class="bg-slate-800 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-slate-200 transition shadow-lg">
+            <a href="https://nesibekeles.github.io/loyalty_acquisition/Diyarbakir%20Landing_final.html" target="_blank" class="btn btn-danger btn-lg">
+                            <i class="fas fa-dharmachakra me-2"></i> <strong>Demo Site Görünümü İçin Tıklayın</strong> 
+                        </a>
+        </button>
+    </div>	
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div class="card flex flex-col justify-between">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box bg-blue-50 text-blue-600"><i class="fas fa-chart-line"></i></div>
+                        İş Hedefleri & B2B Gelir Modeli (Neden?)
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-700 mb-6">
+                        <li class="flex items-start">
+                            <i class="fas fa-users text-blue-500 mt-1 mr-2"></i>
+                            <div><strong>Lokal Trafik & Bilinirlik:</strong> Düşük performanslı illerde SEO, UX ve Kampanya odaklı landing pageler ile trafiği canlandırmak.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-handshake text-blue-500 mt-1 mr-2"></i>
+                            <div><strong>B2B Satış Gücü:</strong> Artan çift trafiğini ve oluşan "Düğün.com'da olmalısın" algısını bölgedeki firmalara paket satmak için teşvik olarak kullanmak.</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border border-green-200 rounded-lg overflow-hidden relative mt-auto">
+                    <div class="bg-green-50 px-4 py-2 font-semibold text-green-800 text-xs md:text-sm border-b border-green-200 flex justify-between items-center">
+                        <div class="flex items-center"><i class="fas fa-coins mr-2"></i> B2B Gelir Öngörüsü (Simülatör)</div>
+                        <span class="text-[10px] bg-green-200/60 text-green-800 px-2 py-1 rounded no-print"><i class="fas fa-calculator text-[8px] mr-1"></i> Değerleri Değiştirin</span>
+                    </div>
+                    <table class="w-full text-sm text-left">
+                        <tbody>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                <td class="px-4 py-2 text-slate-600">Planlanan İl Sayısı</td>
+                                <td class="px-4 py-2 w-1/3">
+                                    <div class="flex items-center">
+                                        <input type="number" id="calc-cities" value="10" min="1" class="text-right mr-1">
+                                        <span class="text-slate-400 text-xs">Adet</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                <td class="px-4 py-2 text-slate-600">Aylık Ort. Satış (İl Başına)</td>
+                                <td class="px-4 py-2 w-1/3">
+                                    <div class="flex items-center">
+                                        <input type="number" id="calc-sales" value="10" min="0" class="text-right mr-1">
+                                        <span class="text-slate-400 text-xs">Adet</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                <td class="px-4 py-2 text-slate-600">Ortalama Aylık Paket Fiyatı</td>
+                                <td class="px-4 py-2 w-1/3">
+                                    <div class="flex items-center">
+                                        <span class="text-slate-800 font-bold mr-1">₺</span>
+                                        <input type="number" id="calc-price" value="6500" min="0" class="text-right mr-1">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                <td class="px-4 py-2 text-slate-600">Satılan Ürün Süresi</td>
+                                <td class="px-4 py-2 w-1/3">
+                                    <div class="flex items-center">
+                                        <input type="number" id="calc-months" value="12" min="1" class="text-right mr-1">
+                                        <span class="text-slate-400 text-xs">Ay</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="bg-green-100/50">
+                                <td class="px-4 py-3 text-slate-800 font-bold">Hedeflenen Toplam Ciro</td>
+                                <td class="px-4 py-3 font-bold text-green-700 w-1/3 text-lg text-right" id="calc-total">
+                                    ₺65.000
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box bg-purple-50 text-purple-600"><i class="fas fa-layer-group"></i></div>
+                    Sayfa Kapsamı ve Özellikler (Nasıl?)
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+
+                    <div>
+                        <h5 class="font-semibold text-slate-800 text-sm mb-2 border-b pb-1">1. İçerik & Fırsatlar</h5>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li><span class="font-medium text-slate-800">İl Özel İndirimler:</span> Bölgesel kampanyaların vitrine çıkarılması.</li>
+                            <li><span class="font-medium text-slate-800">Akıllı Harita:</span> Lokasyon bazlı mekan keşfi.</li>
+                            <li><span class="font-medium text-slate-800">Editör Önerileri:</span> O ilin koşullarına uygun dinamik ipuçları.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-slate-800 text-sm mb-2 border-b pb-1">2. Görsel & Navigasyon</h5>
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            <li><span class="font-medium text-slate-800">Şehir Odaklı Hero:</span> İle özel yüksek çözünürlüklü banner ile karşılama.</li>
+                            <li><span class="font-medium text-slate-800">Sabit Kategorileri:</span> Yuvarlak ikonlarla mobil odaklı hızlı filtreleme.</li>
+                            <li><span class="font-medium text-slate-800">Sade - Temiz Sayfa Yapısı:</span> Pinterest tarzı görsel ağırlıklı firma listelemesi.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-slate-50 p-3 rounded-lg border border-slate-100 flex items-center">
+                    <i class="fas fa-bullhorn text-pink-500 text-xl mr-3"></i>
+                    <div>
+                        <h5 class="font-semibold text-slate-800 text-sm">B2B Satış Pazarlaması</h5>
+                        <p class="text-xs text-slate-500">Hazırlanan bu modern sayfa, saha satış ekibi tarafından <i>"Diyarbakır'daki çiftler bu sayfada, sizin firmanız nerede?"</i> argümanıyla bir satış materyali olarak kullanılacaktır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 pt-0 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="card border-amber-200 bg-amber-50/30">
+                <div class="card-header border-amber-200">
+                    <div class="icon-box bg-amber-100 text-amber-600"><i class="fas fa-exclamation-triangle"></i></div>
+                    Netleşmesi Gerekenler
+                </div>
+                <ul class="space-y-2 text-sm text-slate-700 list-disc list-inside">
+                    <li><strong>İl Listesi:</strong> Projeye başlanacak illerin ve fiyatların netleştirilmesi.</li>
+                    <li><strong>Satış Yöntemi:</strong> Satış ekibi kim olacak; TES ile mi başlanacak?</li>
+                    <li><strong>Landing Page Maliyeti:</strong> İl-düğün sayfalarında IT ekibine çıkacak iş gücünün hesaplanması.</li>
+                    <li><strong>Marketing Stratejileri:</strong> İlgili illerde yapılacak dijital ve <strong>outdoor reklamların</strong> belirlenmesi.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box bg-slate-100 text-slate-600"><i class="fas fa-code"></i></div>
+                    Teknik İhtiyaçlar
+                </div>
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <span class="bg-slate-800 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded">Backend</span>
+                        <p class="text-slate-600 mt-1 text-xs">✔ Listing sayfalarına banner alanı.</p>
+<p class="text-slate-600 mt-1 text-xs">✔ "Editör Önerileri" için içerik giriş alanlarının açılması.</p>
+<p class="text-slate-600 mt-1 text-xs">✔ Harita eklenti optimizasyonları.</p>
+                    </div>
+                    <div>
+                        <span class="bg-slate-800 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded">Frontend</span>
+                        <p class="text-slate-600 mt-1 text-xs">✔ Listing banner tasarımı.</p>
+<p class="text-slate-600 mt-1 text-xs">✔ İl-düğün sayfası hero ve kampanya alanı.</p>
+<p class="text-slate-600 mt-1 text-xs">✔ Yeni başlık alanları (harita, il özel öneriler vb.).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-box bg-green-50 text-green-600"><i class="fas fa-route"></i></div>
+                    Fazlandırma Planı
+                </div>
+                
+                <div class="relative border-l-2 border-slate-200 ml-3 mt-2 space-y-4">
+                    <div class="relative pl-4">
+                        <div class="absolute w-3 h-3 bg-pink-500 rounded-full -left-[7px] top-1 shadow-[0_0_0_3px_#fdf2f8]"></div>
+                        <h4 class="font-bold text-slate-800 text-sm">Faz 1: TES Satış Testi</h4>
+                        <p class="text-[11px] text-slate-500">Trafiği en yüksek ilk 5 ilde TES ile satışın yapılması. Eş zamanlı IT geliştirmelerinin başlaması.</p>
+                    </div>
+                    <div class="relative pl-4">
+                        <div class="absolute w-3 h-3 bg-slate-300 rounded-full -left-[7px] top-1"></div>
+                        <h4 class="font-bold text-slate-800 text-sm">Faz 2: Sahaya İniş</h4>
+                        <p class="text-[11px] text-slate-500">Oluşan yeni trafikle ve TES'in satışını yapamadığı ama randevu veren firmalara saha ekiplerinin gitmesi; outdoor reklamların başlaması.</p>
+                    </div>
+                    <div class="relative pl-4">
+                        <div class="absolute w-3 h-3 bg-slate-300 rounded-full -left-[7px] top-1"></div>
+                        <h4 class="font-bold text-slate-800 text-sm">Faz 3: Roll-Out</h4>
+                        <p class="text-[11px] text-slate-500">Satışlar belirli bir seviyeye gelince bölgeye sabit satışçının alınması; yeni satışçının 1 ay İstanbul'da satış kampına girmesi.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="bg-slate-50 text-center py-4 border-t border-slate-200 text-xs text-slate-400">
+            Düğün.com Şirket İçi Kullanım İçindir
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const elCities = document.getElementById('calc-cities');
+            const elSales = document.getElementById('calc-sales');
+            const elPrice = document.getElementById('calc-price');
+            const elMonths = document.getElementById('calc-months');
+            const elTotal = document.getElementById('calc-total');
+
+            function calculateRevenue() {
+                const cities = parseFloat(elCities.value) || 0;
+                const sales = parseFloat(elSales.value) || 0;
+                const price = parseFloat(elPrice.value) || 0;
+                const months = parseFloat(elMonths.value) || 0;
+
+                const totalRevenue = cities * sales * price * months;
+
+                // Para birimi formatında yazdır (Örn: ₺65.000)
+                elTotal.innerText = new Intl.NumberFormat('tr-TR', { 
+                    style: 'currency', 
+                    currency: 'TRY',
+                    maximumFractionDigits: 0
+                }).format(totalRevenue);
+            }
+
+            // Input alanlarında herhangi bir değişiklik olduğunda hesaplamayı tetikle
+            const inputs = [elCities, elSales, elPrice, elMonths];
+            inputs.forEach(input => {
+                input.addEventListener('input', calculateRevenue);
+                input.addEventListener('change', calculateRevenue);
+            });
+
+            // Sayfa yüklendiğinde ilk hesaplamayı yap
+            calculateRevenue();
+        });
+    </script>
+</body>
+</html>
