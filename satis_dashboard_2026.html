@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Satış Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg:   #f4f4f2;
+  --bg2:  #ffffff;
+  --bg3:  #eeeeec;
+  --bg4:  #e6e6e4;
+  --bdr:  rgba(0,0,0,0.08);
+  --bdr2: rgba(0,0,0,0.14);
+  --tx:   #1a1a1a;
+  --tx2:  #4a4a52;
+  --tx3:  #9a9aa6;
+  --acc:  #3b6bef;
+  --sas:  #3b6bef; --sasl: rgba(59,107,239,0.12);
+  --tes:  #0fa888; --tesl: rgba(15,168,136,0.12);
+  --mos:  #e0900a; --mosl: rgba(224,144,10,0.12);
+  --sad:  #d04070; --sadl: rgba(208,64,112,0.12);
+  --pos:  #0a9e72;
+  --neg:  #d94040;
+  --r:    12px;
+  --r2:   8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;min-height:100vh}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;min-width:210px;background:var(--bg2);border-right:1px solid var(--bdr);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:100}
+.main{margin-left:210px;flex:1}
+.logo{padding:20px 18px 14px;border-bottom:1px solid var(--bdr)}
+.logo-t{font-size:14px;font-weight:600;color:var(--tx)}
+.logo-s{font-size:11px;color:var(--tx3);margin-top:2px}
+.nav{padding:10px 8px;flex:1;overflow-y:auto}
+.nav-sec{font-size:10px;color:var(--tx3);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:12px 10px 5px}
+.nav-btn{display:flex;align-items:center;gap:9px;width:100%;padding:8px 11px;border-radius:var(--r2);border:none;background:transparent;color:var(--tx2);font-size:13px;cursor:pointer;transition:all .15s;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-btn:hover{background:var(--bg3);color:var(--tx)}
+.nav-btn.active{background:var(--sasl);color:var(--acc);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(244,244,242,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);height:54px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:15px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.sync-wrap{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx3)}
+.sync-dot{width:7px;height:7px;border-radius:50%}
+.sync-dot.ok{background:var(--pos)}
+.sync-dot.spin{background:var(--mos);animation:pulse 1s infinite}
+.sync-dot.err{background:var(--neg)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── BUTTONS ── */
+.btn{padding:6px 13px;border-radius:var(--r2);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bdr2);background:var(--bg2);color:var(--tx);font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--bg3)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn-primary:hover{background:#2d59d6}
+
+/* ── CONTENT ── */
+.content{padding:22px 24px}
+.page{display:none}
+.page.active{display:block}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:3px;background:var(--bg3);border-radius:var(--r2);padding:3px;width:fit-content}
+.tab-btn{padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all .15s}
+.tab-btn.active{background:var(--bg2);color:var(--tx);font-weight:500;border:1px solid var(--bdr)}
+
+/* ── KPI ── */
+.kpi-row{display:grid;gap:10px;margin-bottom:16px}
+.kpi-row-3{grid-template-columns:repeat(3,1fr)}
+.kpi-row-5{grid-template-columns:repeat(5,1fr)}
+.kpi{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.sas::before{background:var(--sas)}.kpi.tes::before{background:var(--tes)}
+.kpi.mos::before{background:var(--mos)}.kpi.sad::before{background:var(--sad)}
+.kpi-label{font-size:11px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.kpi-val{font-size:22px;font-weight:600;letter-spacing:-.4px;font-family:'DM Mono',monospace}
+.kpi-chg{font-size:11px;margin-top:5px}
+.kpi-chg.pos{color:var(--pos)}.kpi-chg.neg{color:var(--neg)}.kpi-chg.neu{color:var(--tx3)}
+.kpi-bk{margin-top:10px;border-top:1px solid var(--bdr);padding-top:8px;display:flex;flex-direction:column;gap:4px}
+.kpi-bk-row{display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.kpi-bk-lbl{color:var(--tx3);display:flex;align-items:center;gap:4px}
+.kpi-bk-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.kpi-bk-val{font-weight:500;color:var(--tx2);font-family:'DM Mono',monospace}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);margin:18px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--bdr)}
+
+/* ── CHARTS ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.chart-grid-32{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:16px}
+.card{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:18px}
+.card-title{font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:4px}
+.card-sub{font-size:11px;color:var(--tx3);margin-bottom:12px}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.leg-i{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tx2)}
+.leg-sq{width:10px;height:10px;border-radius:2px}
+
+/* ── INSIGHTS ── */
+.insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.insight-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:18px}
+.insight-card.good{border-color:rgba(10,158,114,.25);background:rgba(10,158,114,.02)}
+.insight-card.warn{border-color:rgba(217,64,64,.25);background:rgba(217,64,64,.02)}
+.insight-card.info{border-color:rgba(59,107,239,.2);background:rgba(59,107,239,.02)}
+.insight-tag{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+.insight-tag.good{background:rgba(10,158,114,.12);color:var(--pos)}
+.insight-tag.warn{background:rgba(217,64,64,.12);color:var(--neg)}
+.insight-tag.info{background:rgba(59,107,239,.1);color:var(--acc)}
+.insight-title{font-size:13px;font-weight:600;margin-bottom:6px;letter-spacing:-.2px}
+.insight-body{font-size:12px;color:var(--tx2);line-height:1.65;margin-bottom:12px}
+.insight-mets{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.ins-met{background:var(--bg3);border-radius:var(--r2);padding:7px 11px}
+.ins-met-l{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em}
+.ins-met-v{font-size:16px;font-weight:600;font-family:'DM Mono',monospace;margin-top:2px}
+.ins-met-v.pos{color:var(--pos)}.ins-met-v.neg{color:var(--neg)}
+.divider{height:1px;background:var(--bdr);margin:10px 0}
+.action-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);margin-bottom:7px}
+.action-list{display:flex;flex-direction:column;gap:6px}
+.action-item{display:flex;gap:8px;font-size:12px;color:var(--tx2);line-height:1.5;align-items:flex-start}
+.action-num{min-width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.action-num.good{background:rgba(10,158,114,.12);color:var(--pos)}
+.action-num.warn{background:rgba(217,64,64,.12);color:var(--neg)}
+.action-num.info{background:rgba(59,107,239,.1);color:var(--acc)}
+
+/* ── SUMMARY BAR ── */
+.sum-bar{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.sum-item{display:flex;flex-direction:column;gap:2px}
+.sum-label{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em}
+.sum-val{font-size:18px;font-weight:600;font-family:'DM Mono',monospace}
+.sum-sep{width:1px;background:var(--bdr);align-self:stretch}
+
+/* ── UPLOAD ── */
+.upload-zone{border:2px dashed var(--bdr2);border-radius:var(--r);padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3);margin-bottom:14px}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--acc);background:rgba(59,107,239,.04)}
+.upload-tabs{display:flex;gap:3px;background:var(--bg3);border-radius:var(--r2);padding:3px;width:fit-content;margin-bottom:12px}
+.upload-preview{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r2);padding:12px;margin-bottom:12px;font-size:11px;color:var(--tx2);max-height:160px;overflow-y:auto;font-family:'DM Mono',monospace;white-space:pre;display:none}
+.upload-res{padding:9px 13px;border-radius:var(--r2);font-size:12px;margin-bottom:12px;display:none}
+.upload-res.ok{background:rgba(10,158,114,.08);border:1px solid rgba(10,158,114,.2);color:var(--pos)}
+.upload-res.err{background:rgba(217,64,64,.08);border:1px solid rgba(217,64,64,.2);color:var(--neg)}
+
+/* ── ENTRY FORM ── */
+.entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.entry-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.entry-head{padding:12px 16px;border-bottom:1px solid var(--bdr);font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px}
+.entry-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field-label{font-size:11px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.field-input{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2);padding:8px 11px;color:var(--tx);font-size:13px;font-family:'DM Mono',monospace;outline:none;transition:border-color .15s;width:100%}
+.field-input:focus{border-color:var(--acc)}
+.date-bar{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 16px;margin-bottom:16px;flex-wrap:wrap}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);border-bottom:1px solid var(--bdr)}
+td{padding:9px 12px;border-bottom:1px solid var(--bdr);color:var(--tx2);font-family:'DM Mono',monospace}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(0,0,0,.015)}
+
+/* ── BADGE ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge.sas{background:var(--sasl);color:var(--sas)}
+.badge.tes{background:var(--tesl);color:var(--tes)}
+.badge.mos{background:var(--mosl);color:var(--mos)}
+.badge.sad{background:var(--sadl);color:var(--sad)}
+
+/* ── LOADING ── */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--tx3);gap:14px}
+.spinner{width:36px;height:36px;border:3px solid var(--bdr2);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── NOTIF ── */
+.notif{position:fixed;top:16px;right:16px;z-index:9999;background:var(--bg2);border:1px solid var(--pos);border-radius:var(--r2);padding:9px 14px;font-size:12px;color:var(--pos);opacity:0;transition:opacity .3s;pointer-events:none}
+.notif.show{opacity:1}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-210px)}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}.chart-grid-2,.chart-grid-32{grid-template-columns:1fr}
+  .kpi-row-5{grid-template-columns:repeat(2,1fr)}.kpi-row-3{grid-template-columns:1fr}
+  .insight-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="notif" id="notif"></div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-t">Satış Dashboard</div>
+    <div class="logo-s">2026 Performans Takibi</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-sec">Genel</div>
+    <button class="nav-btn active" onclick="goto('overview')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/></svg>
+      Genel Bakış
+    </button>
+    <button class="nav-btn" onclick="goto('insights')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="5" x2="8" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11" r=".8" fill="currentColor"/></svg>
+      Insight & Aksiyon
+    </button>
+    <button class="nav-btn" onclick="goto('trends')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><polyline points="1,12 5,7 8,9 12,4 15,6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      Günlük Trendler
+    </button>
+    <div class="nav-sec">Ekipler</div>
+    <button class="nav-btn" onclick="goto('sas')"><span class="dot" style="background:var(--sas)"></span>SAS</button>
+    <button class="nav-btn" onclick="goto('tes')"><span class="dot" style="background:var(--tes)"></span>TES</button>
+    <button class="nav-btn" onclick="goto('mos')"><span class="dot" style="background:var(--mos)"></span>MOS</button>
+    <button class="nav-btn" onclick="goto('sad')"><span class="dot" style="background:var(--sad)"></span>SAD</button>
+    <div class="nav-sec">Yönetim</div>
+    <button class="nav-btn" onclick="goto('entry')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="8" y1="5" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="5" y1="8" x2="11" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Veri Girişi
+    </button>
+    <button class="nav-btn" onclick="goto('rawdata')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="1" y1="5" x2="15" y2="5" stroke="currentColor" stroke-width="1.2"/><line x1="5" y1="5" x2="5" y2="15" stroke="currentColor" stroke-width="1.2"/></svg>
+      Ham Veri
+    </button>
+  </nav>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button onclick="document.getElementById('sidebar').classList.toggle('open')" style="display:none;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2);width:32px;height:32px;cursor:pointer;font-size:16px" id="menuBtn">☰</button>
+      <span class="topbar-title" id="topbarTitle">Genel Bakış</span>
+    </div>
+    <div class="topbar-right">
+      <div class="sync-wrap">
+        <span class="sync-dot ok" id="syncDot"></span>
+        <span id="syncLabel">Hazır</span>
+      </div>
+      <button class="btn" id="syncBtn" onclick="syncSheets()">↻ Güncelle</button>
+      <button class="btn" onclick="exportCSV()">↓ CSV</button>
+      <button class="btn btn-primary" onclick="goto('entry')">+ Veri Gir</button>
+    </div>
+  </header>
+
+  <!-- OVERVIEW -->
+  <div class="page active content" id="page-overview">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:19px;font-weight:600;letter-spacing:-.4px">Genel Bakış</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px">Tüm ekipler — aylık performans</div>
+      </div>
+      <div id="monthTabsOv" class="tab-bar"></div>
+    </div>
+    <div id="kpi-ciro" class="kpi-row kpi-row-3"></div>
+    <div id="kpi-adet" class="kpi-row kpi-row-5"></div>
+    <div id="kpi-satis-section" style="display:none">
+      <div class="sec-label">Satış Adetleri</div>
+      <div id="kpi-satis" class="kpi-row kpi-row-3"></div>
+    </div>
+    <div class="chart-grid-2">
+      <div class="card">
+        <div class="card-title">Aylık Ciro Karşılaştırması (₺)</div>
+        <div class="card-sub">Yeni (SAS+MOS) / Yenileme (SAS) / TES</div>
+        <div class="leg" id="leg-ciro-bar">
+          <span class="leg-i"><span class="leg-sq" style="background:var(--sas)"></span>SAS+MOS Yeni</span>
+          <span class="leg-i"><span class="leg-sq" style="background:rgba(59,107,239,.45)"></span>SAS Yenileme</span>
+          <span class="leg-i"><span class="leg-sq" style="background:var(--tes)"></span>TES</span>
+        </div>
+        <div style="position:relative;height:240px"><canvas id="ch-ciro-bar"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Aktivite Karşılaştırması (Günlük Ort.)</div>
+        <div class="card-sub">Tüm aylar</div>
+        <div style="position:relative;height:260px"><canvas id="ch-akt-bar"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-grid-32">
+      <div class="card">
+        <div class="card-title">Günlük Ciro Akışı — SAS+MOS Yeni & SAS Yenileme (₺)</div>
+        <div class="leg">
+          <span class="leg-i"><span class="leg-sq" style="background:var(--sas)"></span>Yeni (SAS+MOS)</span>
+          <span class="leg-i"><span class="leg-sq" style="background:rgba(59,107,239,.4)"></span>Yenileme (SAS)</span>
+        </div>
+        <div style="position:relative;height:190px"><canvas id="ch-daily-ciro"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Süre Dağılımı</div>
+        <div style="position:relative;height:210px"><canvas id="ch-doughnut"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="page content" id="page-insights">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:19px;font-weight:600;letter-spacing:-.4px">Insight & Aksiyon</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px">Veriden otomatik çıkarılan bulgular ve öneriler</div>
+      </div>
+      <span id="insightDate" style="font-size:11px;color:var(--tx3);background:var(--bg3);padding:4px 10px;border-radius:var(--r2);border:1px solid var(--bdr)"></span>
+    </div>
+    <div class="sum-bar" id="sum-bar"></div>
+    <div class="insight-grid" id="insight-cards"></div>
+  </div>
+
+  <!-- TRENDS -->
+  <div class="page content" id="page-trends">
+    <div style="font-size:19px;font-weight:600;letter-spacing:-.4px;margin-bottom:4px">Günlük Trendler</div>
+    <div style="font-size:12px;color:var(--tx3);margin-bottom:18px">Tüm günlük veri akışı</div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">Günlük Satış Cirosu (₺)</div>
+      <div style="display:flex;gap:6px;margin-bottom:10px" id="ciro-filter-btns">
+        <button class="tab-btn active" onclick="setCiroFilter('YENI',this)">SAS+MOS Yeni</button>
+        <button class="tab-btn" onclick="setCiroFilter('YEN',this)">SAS Yenileme</button>
+        <button class="tab-btn" onclick="setCiroFilter('TES',this)">TES</button>
+      </div>
+      <div class="leg" id="ciro-filter-leg"></div>
+      <div style="position:relative;height:210px"><canvas id="ch-trend-ciro"></canvas></div>
+    </div>
+    <div class="chart-grid-2" style="margin-bottom:14px">
+      <div class="card">
+        <div class="card-title">SAS Günlük Ziyaret</div>
+        <div style="position:relative;height:180px"><canvas id="ch-sas-ziy"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">TES Günlük Görüşme</div>
+        <div style="position:relative;height:180px"><canvas id="ch-tes-gor"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-grid-2">
+      <div class="card">
+        <div class="card-title">SAD Günlük Firma & Randevu</div>
+        <div style="position:relative;height:180px"><canvas id="ch-sad-line"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">MOS Günlük Ziyaret & Ciro</div>
+        <div style="position:relative;height:180px"><canvas id="ch-mos-line"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAS -->
+  <div class="page content" id="page-sas">
+    <div style="font-size:19px;font-weight:600;margin-bottom:18px">SAS — Saha Satış</div>
+    <div id="kpi-sas-team" class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px"></div>
+    <div class="chart-grid-2">
+      <div class="card"><div class="card-title">Aylık Ciro (₺)</div><div style="position:relative;height:200px"><canvas id="ch-sas-ciro"></canvas></div></div>
+      <div class="card"><div class="card-title">Günlük Ziyaret</div><div style="position:relative;height:200px"><canvas id="ch-sas-ziyaret2"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- TES -->
+  <div class="page content" id="page-tes">
+    <div style="font-size:19px;font-weight:600;margin-bottom:18px">TES — Telefon Satış</div>
+    <div id="kpi-tes-team" class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px"></div>
+    <div class="chart-grid-2">
+      <div class="card"><div class="card-title">Aylık Ciro (₺)</div><div style="position:relative;height:200px"><canvas id="ch-tes-ciro"></canvas></div></div>
+      <div class="card"><div class="card-title">Günlük Görüşme</div><div style="position:relative;height:200px"><canvas id="ch-tes-gor2"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- MOS -->
+  <div class="page content" id="page-mos">
+    <div style="font-size:19px;font-weight:600;margin-bottom:18px">MOS — Mağaza Satış</div>
+    <div id="kpi-mos-team" class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px"></div>
+    <div class="chart-grid-2">
+      <div class="card"><div class="card-title">Günlük Ziyaret</div><div style="position:relative;height:200px"><canvas id="ch-mos-ziy"></canvas></div></div>
+      <div class="card"><div class="card-title">Günlük Ciro (₺)</div><div style="position:relative;height:200px"><canvas id="ch-mos-ciro"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- SAD -->
+  <div class="page content" id="page-sad">
+    <div style="font-size:19px;font-weight:600;margin-bottom:18px">SAD — Saha Arama</div>
+    <div id="kpi-sad-team" class="kpi-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px"></div>
+    <div class="chart-grid-2">
+      <div class="card"><div class="card-title">Günlük Görüşülen Firma</div><div style="position:relative;height:200px"><canvas id="ch-sad-firma"></canvas></div></div>
+      <div class="card"><div class="card-title">Günlük Randevu</div><div style="position:relative;height:200px"><canvas id="ch-sad-rnd"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- ENTRY -->
+  <div class="page content" id="page-entry">
+    <div style="font-size:19px;font-weight:600;margin-bottom:4px">Veri Girişi</div>
+    <div style="font-size:12px;color:var(--tx3);margin-bottom:18px">Google Sheets, Excel/CSV yükleme veya manuel giriş</div>
+
+    <div class="sec-label">📎 Toplu Yükleme</div>
+    <div class="tab-bar" style="margin-bottom:12px">
+      <button class="tab-btn active" onclick="setUploadTab('xlsx',this)">Excel (.xlsx)</button>
+      <button class="tab-btn" onclick="setUploadTab('csv',this)">CSV</button>
+    </div>
+    <div id="zone-xlsx">
+      <div class="upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event,'xlsx')" onclick="document.getElementById('inp-xlsx').click()">
+        <div style="font-size:28px;margin-bottom:8px">📊</div>
+        <div style="font-size:13px;font-weight:500;color:var(--tx2)">Excel dosyasını sürükleyin veya tıklayın</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:3px">GÜNLÜK sekmesi — mevcut şablonla aynı yapı</div>
+      </div>
+      <input type="file" id="inp-xlsx" accept=".xlsx,.xls" style="display:none" onchange="fileInput(event,'xlsx')">
+    </div>
+    <div id="zone-csv" style="display:none">
+      <div class="upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event,'csv')" onclick="document.getElementById('inp-csv').click()">
+        <div style="font-size:28px;margin-bottom:8px">📄</div>
+        <div style="font-size:13px;font-weight:500;color:var(--tx2)">CSV dosyasını sürükleyin veya tıklayın</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:3px">İlk sütun tarih, sonrası G1,G2... kodları</div>
+      </div>
+      <input type="file" id="inp-csv" accept=".csv" style="display:none" onchange="fileInput(event,'csv')">
+    </div>
+    <div class="upload-preview" id="upload-preview"></div>
+    <div class="upload-res" id="upload-res"></div>
+    <div id="upload-actions" style="display:none;gap:8px;margin-bottom:20px">
+      <button class="btn btn-primary" onclick="applyUpload()">✓ Verileri Uygula</button>
+      <button class="btn" onclick="cancelUpload()">İptal</button>
+    </div>
+
+    <div class="sec-label" style="margin-top:8px">✏️ Manuel Günlük Giriş</div>
+    <div class="date-bar">
+      <label style="font-size:12px;color:var(--tx2)">Tarih:</label>
+      <input type="date" id="entry-date" style="background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r2);padding:6px 10px;color:var(--tx);font-size:13px;outline:none">
+      <button class="btn btn-primary" onclick="saveEntry()">Kaydet</button>
+      <button class="btn" onclick="clearEntry()">Temizle</button>
+      <span id="entry-status" style="font-size:12px;color:var(--tx3)"></span>
+    </div>
+    <div class="entry-grid" id="entry-grid"></div>
+  </div>
+
+  <!-- RAW DATA -->
+  <div class="page content" id="page-rawdata">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:19px;font-weight:600;letter-spacing:-.4px">Ham Veri</div>
+      <select id="raw-metric-sel" onchange="renderRaw()" style="background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--r2);padding:7px 10px;color:var(--tx);font-size:13px;outline:none;min-width:260px"></select>
+    </div>
+    <div class="card"><div class="tbl-wrap" id="raw-table"></div></div>
+  </div>
+</main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const SHEET_ID = '1R-rpm5-3yBGGlFzzMIJZbc72gFOZ_-TBahqrH9t5vqs';
+let DB = {}; // { G1: {'2026-03-01': 17, ...}, ... }
+let META = {}; // { G1: { id:'ÖT-G1', name:'SAS Ziyaret...', unit:'Adet' }, ... }
+let charts = {};
+let currentOvMonth = null;
+let currentCiroFilter = 'YENI';
+let pendingUpload = null;
+
+// Turkish month name → 2-digit month
+const TR_MON = {Ocak:'01',Şubat:'02',Mart:'03',Nisan:'04',Mayıs:'05',Haziran:'06',Temmuz:'07',Ağustos:'08',Eylül:'09',Ekim:'10',Kasım:'11',Aralık:'12'};
+const EN_MON = {Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+
+// ═══════════════════════════════════════════════════════════
+// DATE PARSING
+// ═══════════════════════════════════════════════════════════
+function parseDate(s) {
+  if (!s) return null;
+  s = s.replace(/"/g,'').trim();
+  // 2026-03-01
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+  // "1 Mart 26" or "1 Mart 2026"
+  m = s.match(/^(\d{1,2})\s+(\S+)\s+(\d{2,4})$/);
+  if (m && TR_MON[m[2]]) {
+    const yr = m[3].length===2 ? '20'+m[3] : m[3];
+    return `${yr}-${TR_MON[m[2]]}-${m[1].padStart(2,'0')}`;
+  }
+  // "Mar 1, 2026"
+  m = s.match(/^(\w{3})\s+(\d{1,2}),?\s+(\d{4})/);
+  if (m && EN_MON[m[1]]) return `${m[3]}-${EN_MON[m[1]]}-${m[2].padStart(2,'0')}`;
+  // 1/3/2026
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) return `${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`;
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CSV PARSER — handles the Sheet's row-per-metric format
+// ═══════════════════════════════════════════════════════════
+function parseCSV(text) {
+  const newDB = {}, newMETA = {};
+
+  const parseRow = (line) => {
+    const res = []; let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c==='"') { inQ=!inQ; continue; }
+      if (c===',' && !inQ) { res.push(cur); cur=''; continue; }
+      cur += c;
+    }
+    res.push(cur);
+    return res.map(v => v.trim());
+  };
+
+  const lines = text.split(/\r?\n/);
+  if (lines.length < 2) return { db: newDB, meta: newMETA };
+
+  // Row 1 = headers: METRİK-ID | METRİK ADI | VERİ TİPİ | VERİ BİRİMİ | (blank) | date1 | date2 ...
+  const headers = parseRow(lines[0]);
+  // Find date columns (col 5 onwards, skip col 4 which is blank)
+  const dateCols = {}; // colIndex → 'YYYY-MM-DD'
+  for (let ci = 4; ci < headers.length; ci++) {
+    const d = parseDate(headers[ci]);
+    if (d) dateCols[ci] = d;
+  }
+
+  if (Object.keys(dateCols).length === 0) {
+    // Try "our CSV export" format: Tarih, G1, G2...
+    if (headers[0].toLowerCase() === 'tarih' || parseDate(headers[0])) {
+      return parseOurCSV(text);
+    }
+    return { db: newDB, meta: newMETA };
+  }
+
+  for (let r = 1; r < lines.length; r++) {
+    const row = parseRow(lines[r]);
+    if (!row[0]) continue;
+    const idMatch = row[0].match(/G(\d+)/);
+    if (!idMatch) continue;
+    const key = 'G' + idMatch[1];
+    newMETA[key] = { id: row[0], name: row[1]||key, unit: row[3]||'' };
+    newDB[key] = {};
+    Object.entries(dateCols).forEach(([ci, date]) => {
+      const raw = (row[parseInt(ci)]||'').replace(/[₺,\s]/g,'');
+      if (raw === '' || raw === '-') return;
+      const v = parseFloat(raw);
+      if (!isNaN(v)) newDB[key][date] = v;
+    });
+  }
+  return { db: newDB, meta: newMETA };
+}
+
+function parseOurCSV(text) {
+  // Our export format: Tarih | G1 | G2 | ...
+  const newDB = {}, newMETA = {};
+  const lines = text.split(/\r?\n/);
+  const parseRow = (line) => line.split(',').map(v => v.trim().replace(/^"|"$/g,''));
+  const headers = parseRow(lines[0]);
+  const keyCols = {};
+  for (let ci = 1; ci < headers.length; ci++) {
+    const h = headers[ci];
+    if (/^G\d+$/.test(h)) keyCols[ci] = h;
+  }
+  for (let r = 1; r < lines.length; r++) {
+    const row = parseRow(lines[r]);
+    const date = parseDate(row[0]);
+    if (!date) continue;
+    Object.entries(keyCols).forEach(([ci, key]) => {
+      const v = parseFloat(row[parseInt(ci)]);
+      if (!isNaN(v)) { if (!newDB[key]) newDB[key]={}; newDB[key][date]=v; }
+    });
+  }
+  return { db: newDB, meta: newMETA };
+}
+
+// ═══════════════════════════════════════════════════════════
+// SHEETS SYNC — 4-proxy fallback
+// ═══════════════════════════════════════════════════════════
+function setSyncStatus(state, msg) {
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  const btn = document.getElementById('syncBtn');
+  dot.className = 'sync-dot ' + state;
+  lbl.textContent = msg;
+  if (btn) { btn.disabled = state==='spin'; btn.textContent = state==='spin' ? '↻ Yükleniyor...' : '↻ Güncelle'; }
+}
+
+async function fetchCSV(url) {
+  // Direct
+  try {
+    const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (r.ok) { const t = await r.text(); if (t.length > 200) return t; }
+  } catch(e) {}
+  // allorigins
+  try {
+    const r = await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url), { signal: AbortSignal.timeout(14000) });
+    if (r.ok) { const j = await r.json(); if (j.contents && j.contents.length > 200) return j.contents; }
+  } catch(e) {}
+  // corsproxy.io
+  try {
+    const r = await fetch('https://corsproxy.io/?'+encodeURIComponent(url), { signal: AbortSignal.timeout(14000) });
+    if (r.ok) { const t = await r.text(); if (t.length > 200) return t; }
+  } catch(e) {}
+  // codetabs
+  try {
+    const r = await fetch('https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url), { signal: AbortSignal.timeout(14000) });
+    if (r.ok) { const t = await r.text(); if (t.length > 200) return t; }
+  } catch(e) {}
+  throw new Error('Tüm proxy\'ler başarısız');
+}
+
+async function syncSheets() {
+  setSyncStatus('spin', 'Yükleniyor...');
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+  try {
+    const text = await fetchCSV(url);
+    const { db, meta } = parseCSV(text);
+    const keyCount = Object.keys(db).length;
+    if (keyCount === 0) throw new Error('Veri parse edilemedi');
+    // Merge into DB
+    Object.entries(db).forEach(([k,v]) => {
+      DB[k] = Object.assign(DB[k]||{}, v);
+    });
+    Object.assign(META, meta);
+    saveLocal();
+    const now = new Date();
+    const ts = now.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit'}) + ' ' + now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+    setSyncStatus('ok', ts + ' güncellendi');
+    localStorage.setItem('lastSync', now.toISOString());
+    toast(`${keyCount} metrik güncellendi`);
+    rebuildAll();
+  } catch(e) {
+    setSyncStatus('err', 'Bağlantı hatası');
+    toast('Hata: ' + e.message.slice(0,40));
+  }
+}
+
+function scheduleAutoSync() {
+  const now = new Date();
+  const next = new Date(now);
+  next.setHours(19,0,0,0);
+  if (next <= now) next.setDate(next.getDate()+1);
+  setTimeout(() => { syncSheets(); setInterval(syncSheets, 24*3600*1000); }, next-now);
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOCAL STORAGE
+// ═══════════════════════════════════════════════════════════
+function saveLocal() {
+  try { localStorage.setItem('satis_db_v3', JSON.stringify(DB)); } catch(e) {}
+  try { localStorage.setItem('satis_meta_v3', JSON.stringify(META)); } catch(e) {}
+}
+
+function loadLocal() {
+  try { const d = localStorage.getItem('satis_db_v3'); if (d) DB = JSON.parse(d); } catch(e) {}
+  try { const m = localStorage.getItem('satis_meta_v3'); if (m) META = JSON.parse(m); } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+// DATA HELPERS
+// ═══════════════════════════════════════════════════════════
+function allDates() {
+  const s = new Set();
+  Object.values(DB).forEach(m => Object.keys(m).forEach(d => s.add(d)));
+  return [...s].sort();
+}
+
+function months() {
+  const s = new Set();
+  allDates().forEach(d => s.add(d.slice(0,7)));
+  return [...s].sort();
+}
+
+function datesOfMonth(m) {
+  return allDates().filter(d => d.startsWith(m));
+}
+
+function sumM(key, mon) {
+  const data = DB[key]||{};
+  return Object.entries(data).filter(([d])=>d.startsWith(mon)).reduce((s,[,v])=>s+(v||0),0);
+}
+
+function sumMAll(keys, mon) {
+  return keys.reduce((s,k)=>s+sumM(k,mon),0);
+}
+
+function workdays(mon) {
+  // Count days with at least one non-null value in the month
+  const s = new Set();
+  Object.values(DB).forEach(m => Object.entries(m).filter(([d,v])=>d.startsWith(mon)&&v!=null).forEach(([d])=>s.add(d)));
+  return Math.max(s.size, 1);
+}
+
+function avgM(key, mon) {
+  return sumM(key,mon) / workdays(mon);
+}
+
+function avgMAll(keys, mon) {
+  return sumMAll(keys,mon) / workdays(mon);
+}
+
+function pct(a, b) { return b > 0 ? ((a-b)/b*100) : null; }
+function fmtV(v, unit) {
+  if (v===null||v===undefined) return '—';
+  if (unit==='TL') return '₺' + (v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':Math.round(v).toLocaleString('tr-TR'));
+  return Math.round(v).toLocaleString('tr-TR');
+}
+function fmtD(d) { const p=d.split('-'); return p[2]+'.'+p[1]; }
+function fmtMon(m) {
+  const tr = {Ocak:'Ocak',Şubat:'Şubat',Mart:'Mart',Nisan:'Nisan',Mayıs:'Mayıs',Haziran:'Haziran',Temmuz:'Temmuz',Ağustos:'Ağustos',Eylül:'Eylül',Ekim:'Ekim',Kasım:'Kasım',Aralık:'Aralık'};
+  const names = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  const [y,mo] = m.split('-');
+  return names[parseInt(mo)-1] + ' ' + y;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════════════════════
+const C = {
+  sas:'#3b6bef', sasA:'rgba(59,107,239,0.45)',
+  tes:'#0fa888', tesA:'rgba(15,168,136,0.45)',
+  mos:'#e0900a', mosA:'rgba(224,144,10,0.45)',
+  sad:'#d04070', sadA:'rgba(208,64,112,0.45)',
+  grid:'rgba(0,0,0,0.06)', tx:'#9a9aa6'
+};
+
+function mkChart(id, type, labels, datasets, opts) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+  const el = document.getElementById(id);
+  if (!el) return;
+  const def = {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#fff',borderColor:'rgba(0,0,0,.08)',borderWidth:1,titleColor:'#1a1a1a',bodyColor:'#4a4a52',padding:10}},
+    scales:{x:{ticks:{color:C.tx,font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:14},grid:{color:C.grid}},
+            y:{ticks:{color:C.tx,font:{size:10}},grid:{color:C.grid}}}
+  };
+  charts[id] = new Chart(el, {type, data:{labels,datasets}, options:Object.assign({},def,opts||{})});
+}
+
+function lineDS(label, data, color, fill) {
+  return {label,data,borderColor:color,backgroundColor:fill||color+'22',fill:!!fill,tension:.35,pointRadius:2,borderWidth:2,spanGaps:true};
+}
+function barDS(label, data, color) {
+  return {label,data,backgroundColor:color,borderRadius:3,borderSkipped:false};
+}
+function moneyTick(v) { return '₺'+fmtV(v,'TL').replace('₺',''); }
+function moneyTooltip() { return {callbacks:{label:c=>'₺'+fmtV(c.raw,'TL').replace('₺','')}}; }
+
+// ═══════════════════════════════════════════════════════════
+// OVERVIEW
+// ═══════════════════════════════════════════════════════════
+function renderOverview() {
+  const mons = months();
+  if (!mons.length) { document.getElementById('kpi-ciro').innerHTML='<div class="loading"><div class="spinner"></div><span>Veri yükleniyor...</span></div>'; return; }
+  if (!currentOvMonth || !mons.includes(currentOvMonth)) currentOvMonth = mons[mons.length-1];
+
+  // Month tabs
+  const tabsEl = document.getElementById('monthTabsOv');
+  tabsEl.innerHTML = mons.map(m =>
+    `<button class="tab-btn${m===currentOvMonth?' active':''}" onclick="setOvMonth('${m}')">${fmtMon(m)}</button>`
+  ).join('');
+
+  const m = currentOvMonth;
+  const prevMons = mons.filter(x=>x<m);
+  const prevM = prevMons.length ? prevMons[prevMons.length-1] : null;
+  const wd = workdays(m);
+  const wdLabel = ` <span style="font-size:10px;opacity:.5">(${wd}g)</span>`;
+  const hasPrev = !!prevM;
+
+  function chgBadge(cur, prev, unit) {
+    if (!hasPrev || prev===null) return '';
+    const curA = cur/wd, prevA = prev/workdays(prevM);
+    const p = pct(curA, prevA);
+    if (p===null) return '';
+    const cls = p>=0?'pos':'neg', arr = p>=0?'↑':'↓';
+    return `<div class="kpi-chg ${cls}">${arr} ${Math.abs(p).toFixed(1)}% g.ort.</div>`;
+  }
+
+  function kpiCard(team, label, val, unit, prev, breakdown) {
+    const bk = breakdown ? `<div class="kpi-bk">${breakdown}</div>` : '';
+    return `<div class="kpi ${team}">
+      <div class="kpi-label">${label}${wdLabel}</div>
+      <div class="kpi-val">${fmtV(val,unit)}</div>
+      ${chgBadge(val, prev, unit)}
+      ${bk}
+    </div>`;
+  }
+  function bkRow(label, color, val, unit, total) {
+    const pctStr = total>0 ? `<span style="font-size:10px;color:var(--tx3);margin-left:3px">(${Math.round(val/total*100)}%)</span>` : '';
+    return `<div class="kpi-bk-row">
+      <span class="kpi-bk-lbl"><span class="kpi-bk-dot" style="background:${color}"></span>${label}</span>
+      <span class="kpi-bk-val">${fmtV(val,unit)}${pctStr}</span>
+    </div>`;
+  }
+
+  // Ciro values
+  const sasYeni = sumM('G7',m), sasYeniP = hasPrev?sumM('G7',prevM):null;
+  const sasYen  = sumM('G8',m), sasYenP  = hasPrev?sumM('G8',prevM):null;
+  const mosYeni = sumM('G18',m), mosYeniP = hasPrev?sumM('G18',prevM):null;
+  const tesY    = sumM('G11',m), tesYP   = hasPrev?sumM('G11',prevM):null;
+  const tesYen2 = sumM('G12',m), tesYen2P= hasPrev?sumM('G12',prevM):null;
+  const yeniTot = sasYeni+mosYeni;
+  const tesTot  = tesY+tesYen2;
+  const yeniTotP= hasPrev?sasYeniP+mosYeniP:null;
+  const tesTotP = hasPrev?tesYP+tesYen2P:null;
+
+  document.getElementById('kpi-ciro').innerHTML =
+    kpiCard('tes','TES Ciro',tesTot,'TL',tesTotP,
+      bkRow('Yeni',C.tes,tesY,'TL',tesTot)+bkRow('Yenileme','rgba(15,168,136,.5)',tesYen2,'TL',tesTot)) +
+    kpiCard('sas','Yeni Satış',yeniTot,'TL',yeniTotP,
+      bkRow('SAS Yeni',C.sas,sasYeni,'TL',yeniTot)+bkRow('MOS Yeni',C.mos,mosYeni,'TL',yeniTot)) +
+    kpiCard('sas','Yenileme',sasYen,'TL',sasYenP,
+      bkRow('SAS','#3b6bef',sasYen,'TL',sasYen));
+
+  // Adet values
+  const sadF = sumM('G13',m), sadFP = hasPrev?sumM('G13',prevM):null;
+  const sadR = sumM('G15',m), sadRP = hasPrev?sumM('G15',prevM):null;
+  const sadConv = sadF>0?Math.round(sadR/sadF*1000)/10:0;
+  const sadConvP = (hasPrev&&sumM('G13',prevM)>0)?Math.round(sumM('G15',prevM)/sumM('G13',prevM)*1000)/10:null;
+  const sahaZiy = sumM('G1',m)+sumM('G16',m);
+  const sahaZiyP = hasPrev?sumM('G1',prevM)+sumM('G16',prevM):null;
+  const tesGor = sumM('G9',m), tesGorP = hasPrev?sumM('G9',prevM):null;
+
+  function simpleKpi(team, label, val, unit, prev, sub) {
+    return `<div class="kpi ${team}">
+      <div class="kpi-label">${label}${wdLabel}</div>
+      <div class="kpi-val">${fmtV(val,unit)}</div>
+      <div style="font-size:11px;color:var(--tx3);margin-top:3px">${sub}</div>
+      ${chgBadge(val,prev,unit)}
+    </div>`;
+  }
+  function convKpi() {
+    const diff = sadConvP!==null ? sadConv-sadConvP : null;
+    const badge = diff!==null ? `<div class="kpi-chg ${diff>=0?'pos':'neg'}">${diff>=0?'+':''}${diff.toFixed(1)} puan</div>` : '';
+    return `<div class="kpi sad"><div class="kpi-label">SAD Dönüşüm${wdLabel}</div><div class="kpi-val">${sadConv}%</div><div style="font-size:11px;color:var(--tx3);margin-top:3px">randevu oranı</div>${badge}</div>`;
+  }
+
+  document.getElementById('kpi-adet').innerHTML =
+    simpleKpi('sad','SAD Arama',sadF,'Adet',sadFP,'görüşülen firma') +
+    simpleKpi('sad','SAD Randevu',sadR,'Adet',sadRP,'alınan randevu') +
+    convKpi() +
+    simpleKpi('sas','Saha Ziyaret',sahaZiy,'Adet',sahaZiyP,'SAS+MOS') +
+    simpleKpi('tes','TES Görüşme',tesGor,'Adet',tesGorP,'görüşme yapıldı');
+
+  // Satış adetleri (only if data exists for G22+)
+  const hasAdet = sumM('G22',m)+sumM('G23',m)+sumM('G26',m) > 0;
+  const satisSection = document.getElementById('kpi-satis-section');
+  if (hasAdet) {
+    const sasYA=sumM('G22',m), sasYenA=sumM('G23',m), tesYA=sumM('G24',m), tesYenA=sumM('G25',m), mosYA=sumM('G26',m);
+    const totA=sasYA+sasYenA+mosYA+tesYA+tesYenA;
+    document.getElementById('kpi-satis').innerHTML =
+      kpiCard('sas','Yeni Satış Adedi',sasYA+mosYA,'Adet',null,
+        bkRow('SAS Yeni',C.sas,sasYA,'Adet',sasYA+mosYA)+bkRow('MOS Yeni',C.mos,mosYA,'Adet',sasYA+mosYA)) +
+      kpiCard('sas','Yenileme Adedi',sasYenA,'Adet',null,bkRow('SAS',C.sas,sasYenA,'Adet',sasYenA)) +
+      kpiCard('tes','TES Satış Adedi',tesYA+tesYenA,'Adet',null,
+        bkRow('Yeni',C.tes,tesYA,'Adet',tesYA+tesYenA)+bkRow('Yenileme','rgba(15,168,136,.5)',tesYenA,'Adet',tesYA+tesYenA));
+    satisSection.style.display = 'block';
+  } else {
+    satisSection.style.display = 'none';
+  }
+
+  // ── Charts ──
+  // Ciro bar — all months
+  const allMons = months();
+  const monLabels = allMons.map(fmtMon);
+  mkChart('ch-ciro-bar','bar',monLabels,[
+    barDS('Yeni',allMons.map(mo=>sumM('G7',mo)+sumM('G18',mo)),'#3b6bef'),
+    barDS('Yenileme',allMons.map(mo=>sumM('G8',mo)),'rgba(59,107,239,.45)'),
+    barDS('TES',allMons.map(mo=>sumM('G11',mo)+sumM('G12',mo)),C.tes),
+  ],{plugins:{legend:{display:false},...moneyTooltip()},scales:{x:{ticks:{color:C.tx},grid:{color:C.grid}},y:{ticks:{color:C.tx,callback:moneyTick},grid:{color:C.grid}}}});
+
+  // Aktivite bar — daily averages
+  const aktLabels = ['SAS Ziy.','MOS Ziy.','TES Gör.','SAD Firma','SAD Rnd.'];
+  const aktKeys = [['G1'],['G16'],['G9'],['G13'],['G15']];
+  const aktColors = allMons.map((_,i) => i===allMons.length-1 ? C.sas : `rgba(0,0,0,${0.08+i*0.04})`);
+  mkChart('ch-akt-bar','bar',aktLabels,
+    allMons.map((mo,i) => barDS(fmtMon(mo), aktKeys.map(ks=>Math.round(avgMAll(ks,mo))), aktColors[i])),
+    {scales:{x:{ticks:{color:C.tx,font:{size:9}},grid:{color:C.grid}},y:{ticks:{color:C.tx,callback:v=>v+'/g'},grid:{color:C.grid}}}}
+  );
+
+  // Daily ciro
+  const ds = allDates(); const dsl = ds.map(fmtD);
+  mkChart('ch-daily-ciro','bar',dsl,[
+    barDS('Yeni',ds.map(d=>(DB['G7']?.[d]||0)+(DB['G18']?.[d]||0)),'#3b6bef'),
+    barDS('Yen.',ds.map(d=>DB['G8']?.[d]||0),'rgba(59,107,239,.4)'),
+  ],{plugins:{legend:{display:false},...moneyTooltip()},scales:{x:{stacked:true,ticks:{color:C.tx,font:{size:9},maxRotation:45,autoSkip:true,maxTicksLimit:16},grid:{color:C.grid}},y:{stacked:true,ticks:{color:C.tx,callback:moneyTick},grid:{color:C.grid}}}});
+
+  // Doughnut — latest month duration
+  if (charts['ch-doughnut']) { charts['ch-doughnut'].destroy(); delete charts['ch-doughnut']; }
+  const dEl = document.getElementById('ch-doughnut');
+  if (dEl) {
+    charts['ch-doughnut'] = new Chart(dEl, {type:'doughnut',data:{
+      labels:['SAS Yeni','SAS Yen.','MOS','TES'],
+      datasets:[{data:[sumM('G5',m)||0,sumM('G6',m)||0,sumM('G17',m)||0,sumM('G10',m)||0],
+        backgroundColor:[C.sas,'rgba(59,107,239,.5)',C.mos,C.tes],borderWidth:2,borderColor:'#fff'}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#4a4a52',font:{size:10},padding:8}}}}});
+  }
+}
+
+function setOvMonth(m) {
+  currentOvMonth = m;
+  renderOverview();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INSIGHTS — fully dynamic
+// ═══════════════════════════════════════════════════════════
+function renderInsights() {
+  const mons = months();
+  if (mons.length < 1) return;
+
+  const m = mons[mons.length-1]; // latest month
+  const prevMons = mons.filter(x=>x<m);
+  const prevM = prevMons.length ? prevMons[prevMons.length-1] : null;
+  const wd = workdays(m);
+  const wdP = prevM ? workdays(prevM) : 22;
+
+  document.getElementById('insightDate').textContent = `${fmtMon(m)} — ${wd} iş günü`;
+
+  function a(key) { return sumM(key,m)/wd; }
+  function aP(key) { return prevM ? sumM(key,prevM)/wdP : null; }
+  function aMult(keys) { return keys.reduce((s,k)=>s+a(k),0); }
+  function aPMult(keys) { return prevM ? keys.reduce((s,k)=>s+(sumM(k,prevM)/wdP),0) : null; }
+  function chgPct(cur, prev) { return prev&&prev>0 ? (cur-prev)/prev*100 : null; }
+  function chgStr(p) { return p===null ? '—' : (p>=0?'+':'')+p.toFixed(1)+'%'; }
+  function fmtA(v) { return '₺'+Math.round(v).toLocaleString('tr-TR'); }
+
+  // Key computed values
+  const sasYeniA = a('G7'), sasYeniAP = aP('G7');
+  const sasYenA  = a('G8'), sasYenAP  = aP('G8');
+  const mosYeniA = a('G18');
+  const yeniA    = sasYeniA+mosYeniA, yeniAP = sasYeniAP;
+  const tesA     = aMult(['G11','G12']), tesAP = aPMult(['G11','G12']);
+  const topA     = yeniA+sasYenA+tesA, topAP = yeniAP!==null?(yeniAP+(aP('G8')||0)+tesAP):null;
+  const sadFA    = a('G13'), sadFAP = aP('G13');
+  const sadRA    = a('G15'), sadRAP = aP('G15');
+  const sadConv  = sumM('G13',m)>0 ? sumM('G15',m)/sumM('G13',m)*100 : 0;
+  const sadConvP = prevM&&sumM('G13',prevM)>0 ? sumM('G15',prevM)/sumM('G13',prevM)*100 : null;
+  const tesGA    = a('G9'), tesGAP = aP('G9');
+
+  // Summary bar
+  const totM = sumM('G7',m)+sumM('G8',m)+sumM('G18',m)+sumM('G11',m)+sumM('G12',m);
+  const totP = prevM ? sumM('G7',prevM)+sumM('G8',prevM)+sumM('G18',prevM)+sumM('G11',prevM)+sumM('G12',prevM) : null;
+  const topChg = chgPct(topA, topAP);
+  document.getElementById('sum-bar').innerHTML =
+    (prevM?`<div class="sum-item"><div class="sum-label">${fmtMon(prevM)} Toplam</div><div class="sum-val" style="color:var(--tx2)">${fmtV(totP,'TL')}</div></div><div class="sum-sep"></div>`:'') +
+    `<div class="sum-item"><div class="sum-label">${fmtMon(m)} Toplam</div><div class="sum-val" style="color:var(--tx2)">${fmtV(totM,'TL')}</div></div>` +
+    (topChg!==null?`<div class="sum-sep"></div><div class="sum-item"><div class="sum-label">Günlük Ort. Değişim</div><div class="sum-val" style="color:var(--${topChg>=0?'pos':'neg'})">${chgStr(topChg)}</div></div>`:'') +
+    `<div class="sum-sep"></div><div class="sum-item"><div class="sum-label">MOS Katkısı</div><div class="sum-val" style="color:var(--mos)">${fmtV(sumM('G18',m),'TL')}</div></div>` +
+    `<div class="sum-sep"></div><div class="sum-item"><div class="sum-label">SAD Randevu Oranı</div><div class="sum-val" style="color:var(--${sadConvP!==null&&sadConv>=sadConvP?'pos':'neg'})">%${sadConv.toFixed(1)}</div></div>` +
+    `<div style="font-size:11px;color:var(--tx3);margin-left:auto;align-self:center">Karşılaştırmalar günlük ortalama bazlı</div>`;
+
+  // Generate insights dynamically
+  const yeniChg = chgPct(yeniA, yeniAP);
+  const sasYenChg = chgPct(sasYenA, sasYenAP);
+  const sadFChg = chgPct(sadFA, sadFAP);
+  const tesChg = chgPct(tesA, tesAP);
+  const topChg2 = chgPct(topA, topAP);
+
+  function insCard(type, tag, title, body, mets, actions) {
+    const mh = mets.map(m=>`<div class="ins-met"><div class="ins-met-l">${m.label}</div><div class="ins-met-v ${m.cls||''}">${m.val}</div></div>`).join('');
+    const ah = actions.map((a,i)=>`<div class="action-item"><span class="action-num ${type}">${i+1}</span><span>${a}</span></div>`).join('');
+    return `<div class="insight-card ${type}">
+      <div class="insight-tag ${type}">${tag}</div>
+      <div class="insight-title">${title}</div>
+      <div class="insight-body">${body}</div>
+      <div class="insight-mets">${mh}</div>
+      <div class="divider"></div>
+      <div class="action-label">Önerilen Aksiyonlar</div>
+      <div class="action-list">${ah}</div>
+    </div>`;
+  }
+
+  const insights = [];
+
+  // 1. Genel tablo
+  const totType = totP===null||totM>=totP?'good':'warn';
+  insights.push(insCard(totType,
+    totType==='good'?'✓ Büyüme':'⚠ Dikkat',
+    `${fmtMon(m)} Toplam: ${fmtV(totM,'TL')}` + (totP?` — ${chgStr(pct(totM,totP))} önceki aya göre`:''),
+    `${fmtMon(m)} itibarıyla ${wd} iş günü tamamlandı. Günlük ort. ciro ${fmtA(topA)}/gün.` +
+    (topAP?` Önceki ay (${fmtMon(prevM)}) ortalaması ${fmtA(topAP)}/gün — günlük bazda <strong>${chgStr(topChg2)}</strong>.`:''),
+    [
+      {label:`${fmtMon(prevM)||'Önceki'}`,val:fmtV(totP,'TL'),cls:''},
+      {label:`${fmtMon(m)}`,val:fmtV(totM,'TL'),cls:totM>=(totP||0)?'pos':'neg'},
+      {label:'G.Ort. Değişim',val:chgStr(topChg2),cls:topChg2!==null&&topChg2>=0?'pos':'neg'},
+    ],
+    [
+      'SAS yenileme ve MOS katkısı birlikte izlenmeli — ikisi toplam büyümenin motorları.',
+      'TES mekan dışı odaklı; asıl kaynak SAS+MOS. TES aylık izleme yeterli.',
+      'Güçlü aylarda Mayıs hedefi yukarı kurgulanabilir.',
+    ]
+  ));
+
+  // 2. Yeni satış
+  const yeniType = yeniChg===null||yeniChg>=0?'good':'warn';
+  insights.push(insCard(yeniType,
+    yeniType==='good'?'✓ İyi Giden — Yeni Satış':'⚠ Dikkat — Yeni Satış',
+    `Yeni Satış (SAS+MOS): G.Ort. ${fmtA(yeniA)}/gün` + (yeniChg!==null?` (${chgStr(yeniChg)})`:''),
+    `SAS yeni: ${fmtA(sasYeniA)}/gün. MOS yeni: ${fmtA(mosYeniA)}/gün. Toplam yeni satış g.ort. ${fmtA(yeniA)}/gün.` +
+    (yeniAP!==null?` Önceki ay SAS tek başına ${fmtA(yeniAP)}/gündü.`:'') +
+    ` MOS ${fmtMon(m)} ayında ${fmtV(sumM('G18',m),'TL')} yeni ciro üretti.`,
+    [
+      {label:'SAS Yeni G.Ort.',val:fmtA(sasYeniA),cls:''},
+      {label:'MOS Yeni G.Ort.',val:fmtA(mosYeniA),cls:'pos'},
+      {label:'Toplam Yeni',val:fmtV(sumM('G7',m)+sumM('G18',m),'TL'),cls:yeniType==='good'?'pos':'neg'},
+    ],
+    [
+      'SAD randevularının MOS\'a aktarım hızı yeni satışın yakıtı — bu akış takip edilmeli.',
+      'SAS İstanbul dışı yeni satış temposunu koruyup korumadığı ayrıca izlenmeli.',
+      'MOS\'un sıfır ciro günleri araştırılmalı — pipeline doluluk mu, müşteri hazırlığı mı?',
+    ]
+  ));
+
+  // 3. Yenileme
+  const yenType = sasYenChg===null||sasYenChg>=0?'good':'warn';
+  insights.push(insCard(yenType,
+    yenType==='good'?'✓ İyi Giden — Yenileme':'⚠ Dikkat — Yenileme',
+    `SAS Yenileme: G.Ort. ${fmtA(sasYenA)}/gün` + (sasYenChg!==null?` (${chgStr(sasYenChg)})`:''),
+    `SAS yenileme cirosu g.ort. ${fmtA(sasYenA)}/gün.` +
+    (sasYenAP!==null?` Önceki ay ${fmtA(sasYenAP)}/gündü — günlük bazda <strong>${chgStr(sasYenChg)}</strong>.`:' Karşılaştırma için önceki ay verisi yok.') +
+    ' SAS İstanbul ekibi Nisan 6\'dan itibaren yenilemeye odaklandı.',
+    [
+      {label:'Önceki G.Ort.',val:sasYenAP?fmtA(sasYenAP):'—',cls:''},
+      {label:'Bu Ay G.Ort.',val:fmtA(sasYenA),cls:yenType==='good'?'pos':'neg'},
+      {label:'Toplam',val:fmtV(sumM('G8',m),'TL'),cls:''},
+    ],
+    [
+      'Büyük tekil kapanışların (₺1M+) ne zaman geleceği pipeline\'dan önceden görülebilmeli.',
+      'SAS–SAD koordinasyonu: randevu → ziyaret → kapanış sürecine SLA tanımlanmalı.',
+      'Mevcut müşteri churn oranı izlenmeli — yenileme sürdürülebilirliğinin göstergesi.',
+    ]
+  ));
+
+  // 4. SAD
+  const sadType = sadFChg===null||sadFChg>=0?'good':'info';
+  insights.push(insCard(sadType,
+    sadType==='good'?'✓ İyi Giden — SAD':'→ İzle — SAD',
+    `SAD: ${Math.round(sadFA)}/gün firma, %${sadConv.toFixed(1)} randevu dönüşümü`,
+    `${fmtMon(m)}\'da günlük ort. ${Math.round(sadFA)} firma görüşüldü` +
+    (sadFAP!==null?` (önceki: ${Math.round(sadFAP)}/gün, ${chgStr(sadFChg)})`:'') +
+    `. ${Math.round(sadRA)}/gün randevu. Dönüşüm oranı %${sadConv.toFixed(1)}` +
+    (sadConvP!==null?` (önceki: %${sadConvP.toFixed(1)})`:'')+'. SAD\'da ciro analizi yok; asıl metrik randevu oranı.',
+    [
+      {label:'G.Ort. Firma',val:Math.round(sadFA)+'/gün',cls:sadFChg!==null&&sadFChg>=0?'pos':''},
+      {label:'G.Ort. Randevu',val:Math.round(sadRA)+'/gün',cls:''},
+      {label:'Dönüşüm',val:'%'+sadConv.toFixed(1),cls:sadConvP!==null&&sadConv>=sadConvP?'pos':'neg'},
+    ],
+    [
+      'SAD randevularının SAS\'a (yenileme) vs. MOS\'a (yeni satış) dağılımı takip edilmeli.',
+      'Dönüşüm oranı düşüyorsa yanlış müşteri profili geliyor olabilir — filtre kriterleri gözden geçirilmeli.',
+      'En yüksek firma/randevu günleri belirlenerek arama yoğunluğu o günlere kaydırılmalı.',
+    ]
+  ));
+
+  // 5. TES
+  const tesType = tesChg===null||tesChg>=0?'info':'warn';
+  insights.push(insCard(tesType,
+    '→ TES — Mekan Dışı',
+    `TES Ciro G.Ort.: ${fmtA(tesA)}/gün` + (tesChg!==null?` (${chgStr(tesChg)})`:''),
+    `TES görüşme ortalaması ${Math.round(tesGA)}/gün.` +
+    (tesGAP!==null?` Önceki ay ${Math.round(tesGAP)}/gündü.`:'')+
+    ` G.ort. ciro ${fmtA(tesA)}/gün` +
+    (tesAP!==null?` (önceki: ${fmtA(tesAP)}/gün, ${chgStr(tesChg)})`:'')+
+    '. TES mekan dışı kategoride; mekan için asıl ekipler SAS+MOS.',
+    [
+      {label:'G.Ort. Görüşme',val:Math.round(tesGA)+'/gün',cls:tesGAP!==null&&tesGA>=tesGAP?'pos':'neg'},
+      {label:'G.Ort. Ciro',val:fmtA(tesA),cls:tesChg!==null&&tesChg>=0?'pos':'neg'},
+      {label:'Toplam',val:fmtV(sumM('G11',m)+sumM('G12',m),'TL'),cls:''},
+    ],
+    [
+      'TES görüşme başına ciro düşüyorsa ürün karması veya büyük müşteri kaybı araştırılmalı.',
+      'TES yenileme cirosu ayrıca izlenmeli — müşteri kayıp riski var mı?',
+      'TES için aylık izleme yeterli; günlük takip SAS+MOS öncelikli olmalı.',
+    ]
+  ));
+
+  document.getElementById('insight-cards').innerHTML = insights.join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRENDS
+// ═══════════════════════════════════════════════════════════
+function renderTrends() {
+  const ds = allDates(), dl = ds.map(fmtD);
+  renderCiroFilter();
+  mkChart('ch-sas-ziy','line',dl,[lineDS('Ziyaret',ds.map(d=>DB['G1']?.[d]??null),C.sas,C.sasA)]);
+  mkChart('ch-tes-gor','line',dl,[lineDS('Görüşme',ds.map(d=>DB['G9']?.[d]??null),C.tes,C.tesA)]);
+  mkChart('ch-sad-line','line',dl,[
+    lineDS('Firma',ds.map(d=>DB['G13']?.[d]??null),C.sad),
+    lineDS('Randevu',ds.map(d=>DB['G15']?.[d]??null),'rgba(208,64,112,.45)'),
+  ],{plugins:{legend:{display:true,labels:{color:'#4a4a52',font:{size:10}}}}});
+  mkChart('ch-mos-line','line',dl,[
+    lineDS('Ziyaret',ds.map(d=>DB['G16']?.[d]??null),C.mos),
+  ]);
+}
+
+function setCiroFilter(f, btn) {
+  currentCiroFilter = f;
+  document.querySelectorAll('#ciro-filter-btns .tab-btn').forEach(b=>b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderCiroFilter();
+}
+
+function renderCiroFilter() {
+  const ds = allDates(), dl = ds.map(fmtD);
+  let dss = [], legHtml = '';
+  if (currentCiroFilter==='YENI') {
+    dss = [barDS('SAS Yeni',ds.map(d=>DB['G7']?.[d]||0),C.sas), barDS('MOS Yeni',ds.map(d=>DB['G18']?.[d]||0),C.mos)];
+    legHtml = `<span class="leg-i"><span class="leg-sq" style="background:${C.sas}"></span>SAS Yeni</span><span class="leg-i"><span class="leg-sq" style="background:${C.mos}"></span>MOS Yeni</span>`;
+  } else if (currentCiroFilter==='YEN') {
+    dss = [barDS('Yenileme',ds.map(d=>DB['G8']?.[d]||0),'rgba(59,107,239,.6)')];
+    legHtml = `<span class="leg-i"><span class="leg-sq" style="background:rgba(59,107,239,.6)"></span>SAS Yenileme</span>`;
+  } else {
+    dss = [barDS('TES Yeni',ds.map(d=>DB['G11']?.[d]||0),C.tes), barDS('TES Yen.',ds.map(d=>DB['G12']?.[d]||0),'rgba(15,168,136,.45)')];
+    legHtml = `<span class="leg-i"><span class="leg-sq" style="background:${C.tes}"></span>Yeni</span><span class="leg-i"><span class="leg-sq" style="background:rgba(15,168,136,.45)"></span>Yenileme</span>`;
+  }
+  document.getElementById('ciro-filter-leg').innerHTML = legHtml;
+  mkChart('ch-trend-ciro','bar',dl,dss,{plugins:{legend:{display:false},...moneyTooltip()},scales:{x:{stacked:true,ticks:{color:C.tx,font:{size:9},maxRotation:45,autoSkip:true,maxTicksLimit:16},grid:{color:C.grid}},y:{stacked:true,ticks:{color:C.tx,callback:moneyTick},grid:{color:C.grid}}}});
+}
+
+// ═══════════════════════════════════════════════════════════
+// TEAM PAGES
+// ═══════════════════════════════════════════════════════════
+function renderTeamKPIs(elId, team, kpis) {
+  const mons = months(); if (!mons.length) return;
+  const m = mons[mons.length-1], prevM = mons.length>1?mons[mons.length-2]:null;
+  const wd = workdays(m);
+  document.getElementById(elId).innerHTML = kpis.map(k => {
+    const cur = Array.isArray(k.keys)?sumMAll(k.keys,m):sumM(k.keys,m);
+    const prev = prevM?(Array.isArray(k.keys)?sumMAll(k.keys,prevM):sumM(k.keys,prevM)):null;
+    const curA = cur/wd, prevA = prev?prev/workdays(prevM):null;
+    const chgP = prevA?pct(curA,prevA):null;
+    const badge = chgP!==null?`<div class="kpi-chg ${chgP>=0?'pos':'neg'}">${chgP>=0?'↑':'↓'} ${Math.abs(chgP).toFixed(1)}% g.ort.</div>`:'';
+    return `<div class="kpi ${team}"><div class="kpi-label">${k.label} <span style="font-size:10px;opacity:.5">(${wd}g)</span></div><div class="kpi-val">${fmtV(cur,k.unit)}</div>${badge}</div>`;
+  }).join('');
+}
+
+function renderSAS() {
+  renderTeamKPIs('kpi-sas-team','sas',[
+    {label:'Ciro (Yeni)',keys:'G7',unit:'TL'},{label:'Ciro (Yenileme)',keys:'G8',unit:'TL'},
+    {label:'Ziyaret Toplam',keys:'G1',unit:'Adet'},{label:'Ziyaret Süresi',keys:'G4',unit:'Adet'}
+  ]);
+  const mons=months(),m=mons[mons.length-1];
+  const ms=mons.map(fmtMon),ds=allDates(),dl=ds.map(fmtD);
+  mkChart('ch-sas-ciro','bar',ms,[barDS('Yeni',mons.map(mo=>sumM('G7',mo)),'#3b6bef'),barDS('Yen.',mons.map(mo=>sumM('G8',mo)),'rgba(59,107,239,.45)')],{plugins:{legend:{display:false},...moneyTooltip()},scales:{x:{ticks:{color:C.tx},grid:{color:C.grid}},y:{ticks:{color:C.tx,callback:moneyTick},grid:{color:C.grid}}}});
+  mkChart('ch-sas-ziyaret2','line',dl,[lineDS('Ziyaret',ds.map(d=>DB['G1']?.[d]??null),C.sas,C.sasA)]);
+}
+function renderTES() {
+  renderTeamKPIs('kpi-tes-team','tes',[
+    {label:'Ciro (Yeni)',keys:'G11',unit:'TL'},{label:'Ciro (Yenileme)',keys:'G12',unit:'TL'},
+    {label:'Görüşme',keys:'G9',unit:'Adet'},{label:'Görüşme Süresi',keys:'G10',unit:'Adet'}
+  ]);
+  const mons=months(),ds=allDates(),dl=ds.map(fmtD);
+  mkChart('ch-tes-ciro','bar',mons.map(fmtMon),[barDS('Yeni',mons.map(mo=>sumM('G11',mo)),C.tes),barDS('Yen.',mons.map(mo=>sumM('G12',mo)),'rgba(15,168,136,.45)')],{plugins:{legend:{display:false},...moneyTooltip()},scales:{x:{ticks:{color:C.tx},grid:{color:C.grid}},y:{ticks:{color:C.tx,callback:moneyTick},grid:{color:C.grid}}}});
+  mkChart('ch-tes-gor2','line',dl,[lineDS('Görüşme',ds.map(d=>DB['G9']?.[d]??null),C.tes,C.tesA)]);
+}
+function renderMOS() {
+  renderTeamKPIs('kpi-mos-team','mos',[
+    {label:'Ciro (Yeni)',keys:'G18',unit:'TL'},{label:'Ziyaret',keys:'G16',unit:'Adet'},
+    {label:'Ziyaret Süresi',keys:'G17',unit:'Adet'},{label:'Satış Adedi',keys:'G26',unit:'Adet'}
+  ]);
+  const ds=allDates(),dl=ds.map(fmtD);
+  mkChart('ch-mos-ziy','line',dl,[lineDS('Ziyaret',ds.map(d=>DB['G16']?.[d]??null),C.mos,C.mosA)]);
+  mkChart('ch-mos-ciro','bar',dl,[barDS('Ciro',ds.map(d=>DB['G18']?.[d]||0),C.mos)],{plugins:{legend:{display:false},...moneyTooltip()},scales:{x:{ticks:{color:C.tx,font:{size:9},maxRotation:45,autoSkip:true,maxTicksLimit:14},grid:{color:C.grid}},y:{ticks:{color:C.tx,callback:moneyTick},grid:{color:C.grid}}}});
+}
+function renderSAD() {
+  renderTeamKPIs('kpi-sad-team','sad',[
+    {label:'Görüşülen Firma',keys:'G13',unit:'Adet'},{label:'Randevu',keys:'G15',unit:'Adet'},
+    {label:'Görüşme Süresi',keys:'G14',unit:'Adet'},{label:'Randevu Oranı',keys:['G13'],unit:'Adet'}
+  ]);
+  const ds=allDates(),dl=ds.map(fmtD);
+  mkChart('ch-sad-firma','line',dl,[lineDS('Firma',ds.map(d=>DB['G13']?.[d]??null),C.sad,C.sadA)]);
+  mkChart('ch-sad-rnd','line',dl,[lineDS('Randevu',ds.map(d=>DB['G15']?.[d]??null),C.sad)]);
+}
+
+// ═══════════════════════════════════════════════════════════
+// ENTRY
+// ═══════════════════════════════════════════════════════════
+function buildEntryForm() {
+  const fields = [
+    {team:'sas',label:'SAS — Ziyaret',fields:[{id:'G1',name:'Ziyaret Adedi (Toplam)'},{id:'G2',name:'Yeni Ziyaret Adedi'},{id:'G3',name:'Yenileme Ziyaret Adedi'},{id:'G4',name:'Ziyaret Süresi (dk)'},{id:'G5',name:'Yeni Ziyaret Süresi (dk)'},{id:'G6',name:'Yenileme Ziyaret Süresi (dk)'}]},
+    {team:'sas',label:'SAS — Ciro & Satış',fields:[{id:'G7',name:'Ciro Yeni (₺)'},{id:'G8',name:'Ciro Yenileme (₺)'},{id:'G19',name:'Revid Adedi'},{id:'G22',name:'Satış Adedi (Yeni)'},{id:'G23',name:'Satış Adedi (Yenileme)'}]},
+    {team:'tes',label:'TES — Görüşme & Ciro',fields:[{id:'G9',name:'Görüşme Adedi'},{id:'G10',name:'Görüşme Süresi (dk)'},{id:'G11',name:'Ciro Yeni (₺)'},{id:'G12',name:'Ciro Yenileme (₺)'},{id:'G20',name:'Revid Adedi'},{id:'G24',name:'Satış Adedi (Yeni)'},{id:'G25',name:'Satış Adedi (Yenileme)'}]},
+    {team:'mos',label:'MOS — Mağaza',fields:[{id:'G16',name:'Ziyaret Adedi'},{id:'G17',name:'Ziyaret Süresi (dk)'},{id:'G18',name:'Ciro Yeni (₺)'},{id:'G21',name:'Revid Adedi'},{id:'G26',name:'Satış Adedi (Yeni)'}]},
+    {team:'sad',label:'SAD — Saha Arama',fields:[{id:'G13',name:'Görüşülen Firma'},{id:'G14',name:'Görüşme Süresi (dk)'},{id:'G15',name:'Randevu Adedi'}]},
+  ];
+  document.getElementById('entry-grid').innerHTML = fields.map(sec =>
+    `<div class="entry-card">
+      <div class="entry-head"><span class="badge ${sec.team}">${sec.team.toUpperCase()}</span>${sec.label}</div>
+      <div class="entry-body">${sec.fields.map(f=>
+        `<div class="field"><div class="field-label">${f.name}</div><input class="field-input" id="ef-${f.id}" type="number" placeholder="0"></div>`
+      ).join('')}</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('entry-date').addEventListener('change', function() {
+    const d = this.value;
+    fields.forEach(sec=>sec.fields.forEach(f=>{
+      const el=document.getElementById('ef-'+f.id);
+      if(el){const v=DB[f.id]?.[d];el.value=v!==undefined?v:'';}
+    }));
+  });
+}
+
+function saveEntry() {
+  const d = document.getElementById('entry-date').value;
+  if (!d) { document.getElementById('entry-status').textContent='⚠ Tarih seçin'; return; }
+  const allFields=['G1','G2','G3','G4','G5','G6','G7','G8','G9','G10','G11','G12','G13','G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26'];
+  let n=0;
+  allFields.forEach(k=>{
+    const el=document.getElementById('ef-'+k);
+    if(el&&el.value!==''){if(!DB[k])DB[k]={};DB[k][d]=parseFloat(el.value);n++;}
+  });
+  if(n>0){saveLocal();rebuildAll();document.getElementById('entry-status').textContent=`✓ ${n} metrik kaydedildi`;toast('Kaydedildi');}
+  else document.getElementById('entry-status').textContent='⚠ Hiç veri girilmedi';
+}
+
+function clearEntry() {
+  ['G1','G2','G3','G4','G5','G6','G7','G8','G9','G10','G11','G12','G13','G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26'].forEach(k=>{
+    const el=document.getElementById('ef-'+k); if(el)el.value='';
+  });
+  document.getElementById('entry-status').textContent='';
+}
+
+// ═══════════════════════════════════════════════════════════
+// UPLOAD
+// ═══════════════════════════════════════════════════════════
+function setUploadTab(t,btn) {
+  document.querySelectorAll('#page-entry .upload-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('zone-xlsx').style.display=t==='xlsx'?'block':'none';
+  document.getElementById('zone-csv').style.display=t==='csv'?'block':'none';
+  cancelUpload();
+}
+
+function dropFile(e,t){e.preventDefault();const f=e.dataTransfer.files[0];if(f)processFile(f,t);}
+function fileInput(e,t){const f=e.target.files[0];if(f)processFile(f,t);e.target.value='';}
+
+function processFile(file,type) {
+  const prev=document.getElementById('upload-preview'),res=document.getElementById('upload-res'),act=document.getElementById('upload-actions');
+  prev.style.display='none';res.style.display='none';act.style.display='none';pendingUpload=null;
+  const reader=new FileReader();
+  if(type==='csv'){
+    reader.onload=e=>{
+      try{
+        const {db,meta}=parseCSV(e.target.result);
+        const kc=Object.keys(db).length,dc=new Set(Object.values(db).flatMap(m=>Object.keys(m))).size;
+        if(!kc)throw new Error('Tanınan metrik bulunamadı');
+        pendingUpload={db,meta};
+        prev.textContent=Object.entries(db).map(([k,v])=>`${k.padEnd(4)} | ${Object.keys(v).length} gün | ${Object.keys(v).sort()[0]} → ${Object.keys(v).sort().pop()}`).join('\n');
+        prev.style.display='block';
+        res.className='upload-res ok';res.innerHTML=`✓ ${kc} metrik, ${dc} tarih okundu`;res.style.display='block';
+        act.style.display='flex';
+      }catch(err){res.className='upload-res err';res.innerHTML='✗ '+err.message;res.style.display='block';}
+    };
+    reader.readAsText(file,'UTF-8');
+  }else{
+    reader.onload=e=>{
+      try{
+        const wb=XLSX.read(e.target.result,{type:'array',cellDates:true,raw:false,dateNF:'yyyy-mm-dd'});
+        let allDB={},allMeta={};
+        wb.SheetNames.forEach(sn=>{
+          const ws=wb.Sheets[sn];
+          const csv=XLSX.utils.sheet_to_csv(ws,{blankrows:false});
+          const {db,meta}=parseCSV(csv);
+          Object.entries(db).forEach(([k,v])=>{if(!allDB[k])allDB[k]={};Object.assign(allDB[k],v);});
+          Object.assign(allMeta,meta);
+        });
+        const kc=Object.keys(allDB).length,dc=new Set(Object.values(allDB).flatMap(m=>Object.keys(m))).size;
+        if(!kc)throw new Error('Metrik bulunamadı — şablonla uyuşmuyor olabilir');
+        pendingUpload={db:allDB,meta:allMeta};
+        prev.textContent=Object.entries(allDB).map(([k,v])=>`${k.padEnd(4)} | ${Object.keys(v).length} gün | ${Object.keys(v).sort()[0]||'?'} → ${Object.keys(v).sort().pop()||'?'}`).join('\n');
+        prev.style.display='block';
+        res.className='upload-res ok';res.innerHTML=`✓ ${wb.SheetNames.length} sekme, ${kc} metrik, ${dc} tarih`;res.style.display='block';
+        act.style.display='flex';
+      }catch(err){res.className='upload-res err';res.innerHTML='✗ '+err.message;res.style.display='block';}
+    };
+    reader.readAsArrayBuffer(file);
+  }
+}
+
+function applyUpload() {
+  if(!pendingUpload)return;
+  let n=0;
+  Object.entries(pendingUpload.db).forEach(([k,v])=>{if(!DB[k])DB[k]={};Object.assign(DB[k],v);n+=Object.keys(v).length;});
+  Object.assign(META,pendingUpload.meta||{});
+  saveLocal();rebuildAll();
+  document.getElementById('upload-res').innerHTML='✓ '+n+' veri noktası uygulandı!';
+  document.getElementById('upload-actions').style.display='none';
+  document.getElementById('upload-preview').style.display='none';
+  pendingUpload=null;toast('Veriler uygulandı');
+}
+
+function cancelUpload() {
+  pendingUpload=null;
+  document.getElementById('upload-preview').style.display='none';
+  document.getElementById('upload-res').style.display='none';
+  document.getElementById('upload-actions').style.display='none';
+}
+
+// ═══════════════════════════════════════════════════════════
+// RAW DATA
+// ═══════════════════════════════════════════════════════════
+function buildRawSelect() {
+  const metricList = [
+    {k:'G1',n:'SAS Ziyaret'},{k:'G2',n:'SAS Yeni Ziyaret'},{k:'G3',n:'SAS Yenileme Ziyaret'},
+    {k:'G4',n:'SAS Ziyaret Süresi'},{k:'G7',n:'SAS Ciro Yeni'},{k:'G8',n:'SAS Ciro Yenileme'},
+    {k:'G9',n:'TES Görüşme'},{k:'G10',n:'TES Görüşme Süresi'},{k:'G11',n:'TES Ciro Yeni'},{k:'G12',n:'TES Ciro Yenileme'},
+    {k:'G13',n:'SAD Firma'},{k:'G14',n:'SAD Görüşme Süresi'},{k:'G15',n:'SAD Randevu'},
+    {k:'G16',n:'MOS Ziyaret'},{k:'G17',n:'MOS Ziyaret Süresi'},{k:'G18',n:'MOS Ciro Yeni'},
+    {k:'G22',n:'SAS Satış Adedi (Yeni)'},{k:'G23',n:'SAS Satış Adedi (Yenileme)'},{k:'G26',n:'MOS Satış Adedi'},
+  ];
+  const sel=document.getElementById('raw-metric-sel');
+  if(!sel.options.length) sel.innerHTML=metricList.map(m=>`<option value="${m.k}">${m.n}</option>`).join('');
+}
+function renderRaw() {
+  buildRawSelect();
+  const key=document.getElementById('raw-metric-sel').value;
+  const ds=allDates();
+  const rows=ds.map(d=>{const v=DB[key]?.[d];return `<tr><td style="color:var(--tx3);font-size:11px">${d}</td><td>${v!==undefined?v.toLocaleString('tr-TR'):'—'}</td></tr>`;});
+  document.getElementById('raw-table').innerHTML=`<table><thead><tr><th>Tarih</th><th>Değer</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CSV EXPORT
+// ═══════════════════════════════════════════════════════════
+function exportCSV() {
+  const keys=['G1','G2','G3','G4','G7','G8','G9','G10','G11','G12','G13','G14','G15','G16','G17','G18'];
+  const names=['SAS Ziyaret','SAS Yeni Ziy.','SAS Yen. Ziy.','SAS Ziy. Süresi','SAS Ciro Yeni','SAS Ciro Yen.','TES Görüşme','TES Görüşme Süresi','TES Ciro Yeni','TES Ciro Yen.','SAD Firma','SAD Süresi','SAD Randevu','MOS Ziyaret','MOS Süresi','MOS Ciro Yeni'];
+  const ds=allDates();
+  let csv='Tarih,'+names.join(',')+'\n';
+  ds.forEach(d=>{csv+=d+','+keys.map(k=>{const v=DB[k]?.[d];return v!==undefined?v:'';}).join(',')+'\n';});
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='satis_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+const PAGE_TITLES={overview:'Genel Bakış',insights:'Insight & Aksiyon',trends:'Günlük Trendler',sas:'SAS — Saha Satış',tes:'TES — Telefon',mos:'MOS — Mağaza',sad:'SAD — Saha Arama',entry:'Veri Girişi',rawdata:'Ham Veri'};
+
+function goto(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg)pg.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'"))b.classList.add('active');});
+  document.getElementById('topbarTitle').textContent=PAGE_TITLES[id]||id;
+  // Render on demand
+  if(id==='overview')renderOverview();
+  else if(id==='insights')renderInsights();
+  else if(id==='trends')renderTrends();
+  else if(id==='sas')renderSAS();
+  else if(id==='tes')renderTES();
+  else if(id==='mos')renderMOS();
+  else if(id==='sad')renderSAD();
+  else if(id==='rawdata')renderRaw();
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function rebuildAll() {
+  const active=document.querySelector('.page.active');
+  if(active)goto(active.id.replace('page-',''));
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
+function toast(msg) {
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.className='notif show';
+  setTimeout(()=>n.className='notif',2500);
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+// Inline seed data — injected from Excel
+const SEED_DATA = {"G1":{"2026-03-01":0.0,"2026-03-02":17.0,"2026-03-03":22.0,"2026-03-04":20.0,"2026-03-05":27.0,"2026-03-06":25.0,"2026-03-09":21.0,"2026-03-10":25.0,"2026-03-11":27.0,"2026-03-12":22.0,"2026-03-13":24.0,"2026-03-16":22.0,"2026-03-17":27.0,"2026-03-18":28.0,"2026-03-19":4.0,"2026-03-23":19.0,"2026-03-24":19.0,"2026-03-25":16.0,"2026-03-26":22.0,"2026-03-27":21.0,"2026-03-30":19.0,"2026-03-31":34.0,"2026-04-01":31.0,"2026-04-02":30.0,"2026-04-03":54.0,"2026-04-06":24.0,"2026-04-07":16.0,"2026-04-08":20.0,"2026-04-09":25.0,"2026-04-10":27.0,"2026-04-13":25.0,"2026-04-14":25.0,"2026-04-15":30.0,"2026-04-16":27.0,"2026-04-17":27.0,"2026-04-20":26.0,"2026-04-21":29.0,"2026-04-22":30.0,"2026-04-23":0.0,"2026-04-24":21.0,"2026-04-27":28.0,"2026-04-28":30.0,"2026-04-29":30.0,"2026-04-30":48.0,"2026-05-04":13.0,"2026-05-05":22.0},"G2":{"2026-04-10":15.0,"2026-04-13":11.0,"2026-04-14":9.0,"2026-04-15":13.0,"2026-04-16":13.0,"2026-04-17":8.0,"2026-04-20":12.0,"2026-04-21":16.0,"2026-04-22":13.0,"2026-04-24":8.0,"2026-04-27":11.0,"2026-04-28":17.0,"2026-04-29":14.0,"2026-04-30":27.0,"2026-05-04":11.0,"2026-05-05":9.0},"G3":{"2026-04-10":12.0,"2026-04-13":14.0,"2026-04-14":16.0,"2026-04-15":17.0,"2026-04-16":14.0,"2026-04-17":19.0,"2026-04-20":14.0,"2026-04-21":13.0,"2026-04-22":17.0,"2026-04-24":13.0,"2026-04-27":17.0,"2026-04-28":13.0,"2026-04-29":16.0,"2026-04-30":21.0,"2026-05-04":2.0,"2026-05-05":13.0},"G4":{"2026-03-01":0.0,"2026-03-02":975.0,"2026-03-03":1528.0,"2026-03-04":1175.0,"2026-03-05":1926.0,"2026-03-06":1856.0,"2026-03-09":1751.0,"2026-03-10":1710.0,"2026-03-11":2091.0,"2026-03-12":2004.0,"2026-03-13":1479.0,"2026-03-16":1237.0,"2026-03-17":2000.0,"2026-03-18":1582.0,"2026-03-19":168.0,"2026-03-23":1069.0,"2026-03-24":1174.0,"2026-03-25":1320.0,"2026-03-26":1405.0,"2026-03-27":1535.0,"2026-03-30":1424.0,"2026-03-31":2323.0,"2026-04-01":1960.0,"2026-04-02":2218.0,"2026-04-03":3673.0,"2026-04-06":1800.0,"2026-04-07":1037.0,"2026-04-08":1083.0,"2026-04-09":1804.0,"2026-04-10":1789.0,"2026-04-13":0.0,"2026-04-14":0.0,"2026-04-15":2230.0,"2026-04-16":2004.0,"2026-04-17":1630.0,"2026-04-20":1790.0,"2026-04-21":2296.0,"2026-04-22":2457.0,"2026-04-23":0.0,"2026-04-24":1458.0,"2026-04-27":2048.0,"2026-04-28":2120.0,"2026-04-29":2187.0,"2026-04-30":3063.0,"2026-05-04":770.0,"2026-05-05":1763.0},"G5":{"2026-04-10":694.0,"2026-04-13":539.0,"2026-04-14":1037.0,"2026-04-15":817.0,"2026-04-16":867.0,"2026-04-17":240.0,"2026-04-20":450.0,"2026-04-21":1104.0,"2026-04-22":863.0,"2026-04-24":445.0,"2026-04-27":582.0,"2026-04-28":1087.0,"2026-04-29":878.0,"2026-04-30":1417.0,"2026-05-04":714.0,"2026-05-05":491.0},"G6":{"2026-04-10":1095.0,"2026-04-13":1347.0,"2026-04-14":455.0,"2026-04-15":1413.0,"2026-04-16":1137.0,"2026-04-17":1390.0,"2026-04-20":1340.0,"2026-04-21":1192.0,"2026-04-22":1594.0,"2026-04-24":1013.0,"2026-04-27":1466.0,"2026-04-28":1033.0,"2026-04-29":1309.0,"2026-04-30":1646.0,"2026-05-04":56.0,"2026-05-05":1272.0},"G7":{"2026-03-01":0.0,"2026-03-02":117810.0,"2026-03-03":306000.0,"2026-03-04":300000.0,"2026-03-05":100000.0,"2026-03-06":372000.0,"2026-03-09":156000.0,"2026-03-10":884900.0,"2026-03-11":140000.0,"2026-03-12":404000.0,"2026-03-13":0.0,"2026-03-16":60000.0,"2026-03-17":1003000.0,"2026-03-18":445000.0,"2026-03-19":0.0,"2026-03-23":350000.0,"2026-03-24":0.0,"2026-03-25":539000.0,"2026-03-26":105000.0,"2026-03-27":365000.0,"2026-03-30":85000.0,"2026-03-31":828484.0,"2026-04-01":487000.0,"2026-04-02":1006184.0,"2026-04-03":2054814.0,"2026-04-06":284000.0,"2026-04-07":80000.0,"2026-04-08":0.0,"2026-04-09":0.0,"2026-04-10":0.0,"2026-04-13":0.0,"2026-04-14":180000.0,"2026-04-15":414300.0,"2026-04-16":80000.0,"2026-04-17":420000.0,"2026-04-20":300000.0,"2026-04-21":220400.0,"2026-04-22":346268.0,"2026-04-24":125000.0,"2026-04-27":0.0,"2026-04-28":0.0,"2026-04-29":413262.0,"2026-04-30":912816.0,"2026-05-04":80000.0,"2026-05-05":0.0},"G8":{"2026-03-01":0.0,"2026-03-02":0.0,"2026-03-03":600000.0,"2026-03-04":348000.0,"2026-03-05":570000.0,"2026-03-06":1608000.0,"2026-03-09":0.0,"2026-03-10":225000.0,"2026-03-11":1016040.0,"2026-03-12":836400.0,"2026-03-13":4065984.0,"2026-03-16":0.0,"2026-03-17":1458564.0,"2026-03-18":1148000.0,"2026-03-19":0.0,"2026-03-23":0.0,"2026-03-24":534000.0,"2026-03-25":1636404.0,"2026-03-26":252000.0,"2026-03-27":683952.0,"2026-03-30":870000.0,"2026-03-31":1305156.0,"2026-04-01":324000.0,"2026-04-02":383400.0,"2026-04-03":1573000.0,"2026-04-06":464100.0,"2026-04-07":2178732.0,"2026-04-08":1071000.0,"2026-04-09":360000.0,"2026-04-10":2506098.0,"2026-04-13":1023991.0,"2026-04-14":1400760.0,"2026-04-15":1759560.0,"2026-04-16":976500.0,"2026-04-17":2525058.0,"2026-04-20":1528929.0,"2026-04-21":963450.0,"2026-04-22":531000.0,"2026-04-24":1088109.0,"2026-04-27":384732.0,"2026-04-28":769200.0,"2026-04-29":688350.0,"2026-04-30":1007693.0,"2026-05-04":264000.0,"2026-05-05":2478000.0},"G9":{"2026-03-01":0.0,"2026-03-02":28.0,"2026-03-03":51.0,"2026-03-04":30.0,"2026-03-05":35.0,"2026-03-06":33.0,"2026-03-09":50.0,"2026-03-10":40.0,"2026-03-11":56.0,"2026-03-12":24.0,"2026-03-13":23.0,"2026-03-16":51.0,"2026-03-17":27.0,"2026-03-18":33.0,"2026-03-19":0.0,"2026-03-23":47.0,"2026-03-24":40.0,"2026-03-25":32.0,"2026-03-26":22.0,"2026-03-27":23.0,"2026-03-30":57.0,"2026-03-31":35.0,"2026-04-01":45.0,"2026-04-02":42.0,"2026-04-03":60.0,"2026-04-06":48.0,"2026-04-07":32.0,"2026-04-08":32.0,"2026-04-09":32.0,"2026-04-10":46.0,"2026-04-13":42.0,"2026-04-14":29.0,"2026-04-15":35.0,"2026-04-16":28.0,"2026-04-17":29.0,"2026-04-20":25.0,"2026-04-21":37.0,"2026-04-22":59.0,"2026-04-24":21.0,"2026-04-27":45.0,"2026-04-28":26.0,"2026-04-29":22.0,"2026-04-30":65.0,"2026-05-04":38.0,"2026-05-05":56.0},"G10":{"2026-03-01":0.0,"2026-03-02":133.0,"2026-03-03":191.0,"2026-03-04":152.0,"2026-03-05":106.0,"2026-03-06":147.0,"2026-03-09":270.0,"2026-03-10":150.0,"2026-03-11":181.0,"2026-03-12":208.0,"2026-03-13":190.0,"2026-03-16":226.0,"2026-03-17":97.0,"2026-03-18":179.0,"2026-03-19":0.0,"2026-03-23":244.0,"2026-03-24":149.0,"2026-03-25":73.0,"2026-03-26":82.0,"2026-03-27":115.0,"2026-03-30":292.0,"2026-03-31":332.0,"2026-04-01":241.0,"2026-04-02":197.0,"2026-04-03":278.0,"2026-04-06":210.0,"2026-04-07":162.0,"2026-04-08":209.0,"2026-04-09":189.0,"2026-04-10":56.0,"2026-04-13":161.0,"2026-04-14":211.0,"2026-04-15":124.0,"2026-04-16":181.0,"2026-04-17":180.0,"2026-04-20":113.0,"2026-04-21":151.0,"2026-04-22":218.0,"2026-04-24":112.0,"2026-04-27":156.0,"2026-04-28":86.0,"2026-04-29":143.0,"2026-04-30":257.0,"2026-05-04":131.0,"2026-05-05":223.0},"G11":{"2026-03-01":0.0,"2026-03-02":0.0,"2026-03-03":0.0,"2026-03-04":0.0,"2026-03-05":51750.0,"2026-03-06":0.0,"2026-03-09":51750.0,"2026-03-10":100000.0,"2026-03-11":0.0,"2026-03-12":103500.0,"2026-03-13":51750.0,"2026-03-16":0.0,"2026-03-17":0.0,"2026-03-18":51750.0,"2026-03-19":0.0,"2026-03-23":0.0,"2026-03-24":0.0,"2026-03-25":51750.0,"2026-03-26":103500.0,"2026-03-27":0.0,"2026-03-30":0.0,"2026-03-31":51750.0,"2026-04-01":0.0,"2026-04-02":188715.0,"2026-04-03":0.0,"2026-04-06":0.0,"2026-04-07":0.0,"2026-04-08":0.0,"2026-04-09":51750.0,"2026-04-10":51750.0,"2026-04-13":0.0,"2026-04-14":155200.0,"2026-04-15":0.0,"2026-04-16":0.0,"2026-04-17":0.0,"2026-04-20":0.0,"2026-04-21":0.0,"2026-04-22":0.0,"2026-04-24":0.0,"2026-04-27":0.0,"2026-04-28":0.0,"2026-04-29":51750.0,"2026-04-30":0.0,"2026-05-04":0.0,"2026-05-05":0.0},"G12":{"2026-03-01":0.0,"2026-03-02":60000.0,"2026-03-03":90000.0,"2026-03-04":105000.0,"2026-03-05":171750.0,"2026-03-06":51750.0,"2026-03-09":45000.0,"2026-03-10":237000.0,"2026-03-11":0.0,"2026-03-12":0.0,"2026-03-13":45000.0,"2026-03-16":55000.0,"2026-03-17":0.0,"2026-03-18":148500.0,"2026-03-19":0.0,"2026-03-23":0.0,"2026-03-24":0.0,"2026-03-25":110000.0,"2026-03-26":60000.0,"2026-03-27":51750.0,"2026-03-30":0.0,"2026-03-31":0.0,"2026-04-01":0.0,"2026-04-02":60000.0,"2026-04-03":0.0,"2026-04-06":0.0,"2026-04-07":343500.0,"2026-04-08":171750.0,"2026-04-09":0.0,"2026-04-10":0.0,"2026-04-13":0.0,"2026-04-14":0.0,"2026-04-15":60000.0,"2026-04-16":0.0,"2026-04-17":60000.0,"2026-04-20":0.0,"2026-04-21":60000.0,"2026-04-22":0.0,"2026-04-24":0.0,"2026-04-27":60000.0,"2026-04-28":60000.0,"2026-04-29":0.0,"2026-04-30":0.0,"2026-05-04":120000.0,"2026-05-05":103500.0},"G13":{"2026-03-01":0.0,"2026-03-02":46.0,"2026-03-03":56.0,"2026-03-04":80.0,"2026-03-05":67.0,"2026-03-06":75.0,"2026-03-09":63.0,"2026-03-10":97.0,"2026-03-11":71.0,"2026-03-12":119.0,"2026-03-13":121.0,"2026-03-16":150.0,"2026-03-17":115.0,"2026-03-18":61.0,"2026-03-19":0.0,"2026-03-23":0.0,"2026-03-24":0.0,"2026-03-25":0.0,"2026-03-26":0.0,"2026-03-27":0.0,"2026-03-30":147.0,"2026-03-31":128.0,"2026-04-01":143.0,"2026-04-02":149.0,"2026-04-03":155.0,"2026-04-06":186.0,"2026-04-07":122.0,"2026-04-08":164.0,"2026-04-09":142.0,"2026-04-10":165.0,"2026-04-13":171.0,"2026-04-14":144.0,"2026-04-15":148.0,"2026-04-16":171.0,"2026-04-17":159.0,"2026-04-20":173.0,"2026-04-21":153.0,"2026-04-22":186.0,"2026-04-24":124.0,"2026-04-27":148.0,"2026-04-28":135.0,"2026-04-29":110.0,"2026-04-30":258.0,"2026-05-04":165.0,"2026-05-05":102.0},"G14":{"2026-03-01":0.0,"2026-03-02":71.0,"2026-03-03":89.0,"2026-03-04":142.0,"2026-03-05":93.0,"2026-03-06":112.0,"2026-03-09":160.0,"2026-03-10":206.0,"2026-03-11":92.0,"2026-03-12":160.0,"2026-03-13":148.0,"2026-03-16":228.0,"2026-03-17":168.0,"2026-03-18":101.0,"2026-03-19":0.0,"2026-03-23":0.0,"2026-03-24":0.0,"2026-03-25":0.0,"2026-03-26":0.0,"2026-03-27":0.0,"2026-03-30":198.0,"2026-03-31":156.0,"2026-04-01":248.0,"2026-04-02":209.0,"2026-04-03":171.0,"2026-04-06":108.0,"2026-04-07":201.0,"2026-04-08":328.0,"2026-04-09":257.0,"2026-04-10":214.0,"2026-04-13":233.0,"2026-04-14":183.0,"2026-04-15":236.0,"2026-04-16":355.0,"2026-04-17":210.0,"2026-04-20":274.0,"2026-04-21":293.0,"2026-04-22":309.0,"2026-04-24":186.0,"2026-04-27":175.0,"2026-04-28":213.0,"2026-04-29":176.0,"2026-04-30":275.0,"2026-05-04":270.0,"2026-05-05":170.0},"G15":{"2026-03-01":0.0,"2026-03-02":23.0,"2026-03-03":24.0,"2026-03-04":35.0,"2026-03-05":24.0,"2026-03-06":23.0,"2026-03-09":26.0,"2026-03-10":25.0,"2026-03-11":29.0,"2026-03-12":26.0,"2026-03-13":28.0,"2026-03-16":19.0,"2026-03-17":35.0,"2026-03-18":18.0,"2026-03-23":0.0,"2026-03-24":0.0,"2026-03-25":0.0,"2026-03-26":0.0,"2026-03-27":0.0,"2026-03-30":42.0,"2026-03-31":37.0,"2026-04-01":41.0,"2026-04-02":39.0,"2026-04-03":51.0,"2026-04-06":41.0,"2026-04-07":23.0,"2026-04-08":43.0,"2026-04-09":35.0,"2026-04-10":43.0,"2026-04-13":43.0,"2026-04-14":41.0,"2026-04-15":43.0,"2026-04-16":40.0,"2026-04-17":55.0,"2026-04-20":42.0,"2026-04-21":33.0,"2026-04-22":44.0,"2026-04-24":47.0,"2026-04-27":41.0,"2026-04-28":43.0,"2026-04-29":39.0,"2026-04-30":65.0,"2026-05-04":33.0,"2026-05-05":33.0},"G16":{"2026-04-06":16.0,"2026-04-07":11.0,"2026-04-08":14.0,"2026-04-09":21.0,"2026-04-10":22.0,"2026-04-13":16.0,"2026-04-14":13.0,"2026-04-15":18.0,"2026-04-16":17.0,"2026-04-17":20.0,"2026-04-20":14.0,"2026-04-21":14.0,"2026-04-22":19.0,"2026-04-24":14.0,"2026-04-27":11.0,"2026-04-28":12.0,"2026-04-29":11.0,"2026-04-30":25.0,"2026-05-04":9.0,"2026-05-05":10.0},"G17":{"2026-04-06":731.0,"2026-04-07":655.0,"2026-04-08":608.0,"2026-04-09":984.0,"2026-04-10":777.0,"2026-04-13":916.0,"2026-04-14":518.0,"2026-04-15":1067.0,"2026-04-16":1036.0,"2026-04-17":1062.0,"2026-04-20":742.0,"2026-04-21":952.0,"2026-04-22":950.0,"2026-04-24":508.0,"2026-04-27":950.0,"2026-04-28":649.0,"2026-04-29":488.0,"2026-04-30":1365.0,"2026-05-04":308.0,"2026-05-05":707.0},"G18":{"2026-04-06":78750.0,"2026-04-07":81000.0,"2026-04-08":396600.0,"2026-04-09":268450.0,"2026-04-10":81000.0,"2026-04-13":261000.0,"2026-04-14":0.0,"2026-04-15":106200.0,"2026-04-16":283800.0,"2026-04-17":231000.0,"2026-04-20":0.0,"2026-04-21":0.0,"2026-04-22":406500.0,"2026-04-24":493320.0,"2026-04-27":613440.0,"2026-04-28":0.0,"2026-04-29":63000.0,"2026-04-30":0.0,"2026-05-04":171600.0,"2026-05-05":248040.0},"G19":{"2026-04-06":2.0,"2026-04-07":3.0,"2026-04-08":5.0,"2026-04-09":2.0,"2026-04-10":3.0,"2026-04-13":4.0,"2026-04-14":8.0,"2026-04-15":1.0,"2026-04-16":2.0,"2026-04-17":4.0,"2026-04-20":6.0,"2026-04-21":4.0,"2026-04-22":6.0,"2026-04-24":0.0,"2026-04-27":8.0,"2026-04-28":8.0,"2026-04-29":0.0,"2026-04-30":0.0,"2026-05-04":1.0,"2026-05-05":1.0},"G20":{"2026-04-07":5.0,"2026-04-08":2.0,"2026-04-09":6.0,"2026-04-10":3.0,"2026-04-13":4.0,"2026-04-14":1.0,"2026-04-15":2.0,"2026-04-16":3.0,"2026-04-17":4.0,"2026-04-20":12.0,"2026-04-21":2.0,"2026-04-22":7.0,"2026-04-24":3.0,"2026-04-27":1.0,"2026-04-28":3.0,"2026-04-29":4.0,"2026-04-30":3.0,"2026-05-04":4.0,"2026-05-05":4.0},"G21":{"2026-04-06":2.0,"2026-04-07":5.0,"2026-04-08":3.0,"2026-04-09":3.0,"2026-04-10":3.0,"2026-04-13":0.0,"2026-04-14":3.0,"2026-04-15":4.0,"2026-04-16":5.0,"2026-04-17":9.0,"2026-04-20":5.0,"2026-04-21":2.0,"2026-04-22":0.0,"2026-04-24":3.0,"2026-04-27":1.0,"2026-04-28":0.0,"2026-04-29":1.0,"2026-04-30":3.0,"2026-05-04":3.0,"2026-05-05":3.0},"G22":{"2026-04-07":1.0,"2026-04-08":0.0,"2026-04-09":0.0,"2026-04-10":0.0,"2026-04-13":0.0,"2026-04-14":2.0,"2026-04-15":3.0,"2026-04-16":1.0,"2026-04-17":1.0,"2026-04-20":1.0,"2026-04-21":2.0,"2026-04-22":3.0,"2026-04-24":2.0,"2026-04-27":0.0,"2026-04-28":0.0,"2026-04-29":3.0,"2026-04-30":4.0,"2026-05-04":2.0,"2026-05-05":0.0},"G23":{"2026-04-07":4.0,"2026-04-08":2.0,"2026-04-09":1.0,"2026-04-10":7.0,"2026-04-13":5.0,"2026-04-14":5.0,"2026-04-15":4.0,"2026-04-16":5.0,"2026-04-17":7.0,"2026-04-20":5.0,"2026-04-21":5.0,"2026-04-22":3.0,"2026-04-24":4.0,"2026-04-27":2.0,"2026-04-28":2.0,"2026-04-29":5.0,"2026-04-30":5.0,"2026-05-04":1.0,"2026-05-05":5.0},"G24":{"2026-04-07":0.0,"2026-04-08":0.0,"2026-04-09":1.0,"2026-04-10":0.0,"2026-04-13":0.0,"2026-04-14":1.0,"2026-04-15":0.0,"2026-04-16":0.0,"2026-04-17":0.0,"2026-04-20":0.0,"2026-04-21":0.0,"2026-04-22":0.0,"2026-04-24":0.0,"2026-04-27":0.0,"2026-04-28":0.0,"2026-04-29":1.0,"2026-04-30":0.0,"2026-05-04":0.0,"2026-05-05":0.0},"G25":{"2026-04-07":5.0,"2026-04-08":3.0,"2026-04-09":3.0,"2026-04-10":1.0,"2026-04-13":0.0,"2026-04-14":0.0,"2026-04-15":1.0,"2026-04-16":0.0,"2026-04-17":1.0,"2026-04-20":0.0,"2026-04-21":1.0,"2026-04-22":0.0,"2026-04-24":0.0,"2026-04-27":1.0,"2026-04-28":1.0,"2026-04-29":0.0,"2026-04-30":0.0,"2026-05-04":2.0,"2026-05-05":2.0},"G26":{"2026-04-07":2.0,"2026-04-08":3.0,"2026-04-09":3.0,"2026-04-10":1.0,"2026-04-13":3.0,"2026-04-14":0.0,"2026-04-15":1.0,"2026-04-16":2.0,"2026-04-17":1.0,"2026-04-20":0.0,"2026-04-21":0.0,"2026-04-22":2.0,"2026-04-24":2.0,"2026-04-27":4.0,"2026-04-28":0.0,"2026-04-29":1.0,"2026-04-30":0.0,"2026-05-04":1.0,"2026-05-05":1.0}};
+
+function loadLocal() {
+  try { const d = localStorage.getItem('satis_db_v3'); if (d) DB = JSON.parse(d); } catch(e) {}
+  try { const m = localStorage.getItem('satis_meta_v3'); if (m) META = JSON.parse(m); } catch(e) {}
+  // Always apply seed data on top (new data wins)
+  Object.entries(SEED_DATA).forEach(([k,v]) => {
+    if (!DB[k]) DB[k] = {};
+    Object.assign(DB[k], v);
+  });
+}
+
+buildEntryForm();
+buildRawSelect();
+document.getElementById('entry-date').value=new Date().toISOString().slice(0,10);
+
+// Show sync status
+const ls=localStorage.getItem('lastSync');
+if(ls){const d=new Date(ls);setSyncStatus('ok',d.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})+' güncellendi');}
+
+// Render initial page
+renderOverview();
+
+// Sync from Sheets immediately + schedule 19:00
+syncSheets();
+scheduleAutoSync();
+</script>
+</body>
+</html>
